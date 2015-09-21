@@ -28,7 +28,9 @@ case class Document(
         val file_name: Option[String],
         val mime_type: Option[String],
         val file_size: Option[Int]
-        ) {
+                    ) extends Ordered[Document] {
+
+    def compare(that: Document):Int = file_id compareTo that.file_id
 
     override def toString(): String = "Document [file_id: " + file_id + ", thumb: " + thumb + ", file_name: " + file_name +
                                     ", mime_type: "  + mime_type + ", file_size: " + file_size + "]"

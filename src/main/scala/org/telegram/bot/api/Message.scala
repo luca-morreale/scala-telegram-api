@@ -28,9 +28,9 @@ import java.util.Date
  */
 
 
-class Message(json: JValue) {
+class Message(json: JValue) extends Ordered[Message] {
 
-    val message_id: Long = (json \ Message.MESSAGEID_FIELD).extract[Long]
+    val message_id: Int = (json \ Message.MESSAGEID_FIELD).extract[Int]
 
     val from: User = (json \ Message.FROM_FIELD).extract[User]
 
@@ -95,6 +95,13 @@ class Message(json: JValue) {
     val group_chat_created: Option[Boolean] =
             if (fieldExists(json, Message.GROUPCHATCREATED_FIELD)) Some((json \ Message.GROUPCHATCREATED_FIELD).extract[Boolean]) else None
 
+    /**
+     * ========================================================
+     *
+     *
+     * ========================================================
+     */
+
     def getConvertedDate():Date = new Date((date * 1000) toLong)
 
     def isGroupMessage():Boolean = chat.isGroupChat
@@ -113,7 +120,13 @@ class Message(json: JValue) {
 
     def hasLocation():Boolean = location != None
 
-    def compare(that: Message): Int =  this.date - that.date
+    def compare(that: Message): Int = {
+        if(date - that.date == 0) {
+            message_id - that.message_id
+        } else {
+            date - that.date
+        }
+    }
 
     override def toString(): String = "Message [message_id: " + message_id + ", from: " + from + ", date: " + date +
                                 ", chat: " + chat + ", forward_from: " + forward_from +
@@ -129,50 +142,50 @@ class Message(json: JValue) {
 
 protected object Message {
 
-    val MESSAGEID_FIELD = "message_id";
+    val MESSAGEID_FIELD = "message_id"
 
-    val FROM_FIELD = "from";
+    val FROM_FIELD = "from"
 
-    val DATE_FIELD = "date";
+    val DATE_FIELD = "date"
 
-    val CHAT_FIELD = "chat";
+    val CHAT_FIELD = "chat"
 
-    val FORWARDFROM_FIELD = "forward_from";
+    val FORWARDFROM_FIELD = "forward_from"
 
-    val FORWARDDATE_FIELD = "forward_date";
+    val FORWARDDATE_FIELD = "forward_date"
 
-    val TEXT_FIELD = "text";
+    val TEXT_FIELD = "text"
 
-    val AUDIO_FIELD = "audio";
+    val AUDIO_FIELD = "audio"
 
-    val DOCUMENT_FIELD = "document";
+    val DOCUMENT_FIELD = "document"
 
-    val PHOTO_FIELD = "photo";
+    val PHOTO_FIELD = "photo"
 
-    val STICKER_FIELD = "sticker";
+    val STICKER_FIELD = "sticker"
 
-    val VIDEO_FIELD = "video";
+    val VIDEO_FIELD = "video"
 
     val VOICE_FIELD = "voice"
 
     val CAPTION_FIELD = "caption"
 
-    val CONTACT_FIELD = "contact";
+    val CONTACT_FIELD = "contact"
 
-    val LOCATION_FIELD = "location";
+    val LOCATION_FIELD = "location"
 
-    val NEWCHATPARTICIPANT_FIELD = "new_chat_participant";
+    val NEWCHATPARTICIPANT_FIELD = "new_chat_participant"
 
-    val LEFTCHATPARTICIPANT_FIELD = "left_chat_participant";
+    val LEFTCHATPARTICIPANT_FIELD = "left_chat_participant"
 
-    val NEWCHATTITLE_FIELD = "new_chat_title";
+    val NEWCHATTITLE_FIELD = "new_chat_title"
 
-    val NEWCHATPHOTO_FIELD = "new_chat_photo";
+    val NEWCHATPHOTO_FIELD = "new_chat_photo"
 
-    val DELETECHATPHOTO_FIELD = "delete_chat_photo";
+    val DELETECHATPHOTO_FIELD = "delete_chat_photo"
 
-    val GROUPCHATCREATED_FIELD = "group_chat_created";
+    val GROUPCHATCREATED_FIELD = "group_chat_created"
 
-    val REPLYTOMESSAGE_FIELD = "reply_to_message";
+    val REPLYTOMESSAGE_FIELD = "reply_to_message"
 }
 

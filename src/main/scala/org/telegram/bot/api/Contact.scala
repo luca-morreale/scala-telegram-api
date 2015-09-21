@@ -27,7 +27,9 @@ case class Contact (
         val first_name: String,
         val last_name: Option[String],
         val user_id: Option[Int]
-        ) {
+                   ) extends Ordered[Contact] {
+
+    def compare(that: Contact):Int = phone_number compareTo that.phone_number
 
     override def toString(): String = "Contact [phone_number: " + phone_number + ", first_name: " + first_name +
                                     ", last_name: " + last_name + "user_id: " + user_id + "]"

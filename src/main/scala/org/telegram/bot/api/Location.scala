@@ -25,7 +25,9 @@ package org.telegram.bot.api
 case class Location(
         val longitude: Float,
         val latitude: Float
-        ) {
+                    ) extends Ordered[Location] {
+
+    def compare(that: Location):Int = (longitude - that.longitude) * (latitude - that.latitude) toInt
 
     override def toString(): String = "Location [longitude: " + longitude + ", latitude: " + latitude + "]"
 }

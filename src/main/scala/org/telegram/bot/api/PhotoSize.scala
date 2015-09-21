@@ -27,7 +27,9 @@ case class PhotoSize (
         val width: Int,
         val height: Int,
         val file_size: Option[Int]
-        ) {
+                    ) extends Ordered[PhotoSize] {
+
+    def compare(that: PhotoSize):Int = file_id compareTo that.file_id
 
     override def toString(): String = "PhotoSize [file_id: " + file_id + ", width: " + width + ", height: " + height +
                                 ", file_size: " + file_size + "]"

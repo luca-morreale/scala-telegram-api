@@ -28,7 +28,9 @@ case class Chat(
         val first_name: Option[String],
         val last_name: Option[String],
         val username: Option[String]
-        ) {
+                ) extends Ordered[Chat] {
+
+    def compare(that: Chat):Int = id - that.id
 
     def isGroupChat():Boolean = id < 0
 

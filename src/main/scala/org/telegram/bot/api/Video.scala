@@ -30,7 +30,9 @@ case class Video(
         val thumb: Option[PhotoSize],
         val mime_type: Option[String],
         val file_size: Option[Int]
-        ) {
+                )  extends Ordered[Video] {
+
+    def compare(that: Video):Int = file_id compareTo that.file_id
 
     override def toString(): String = "Video [file_id: " + file_id + ", width: " + width + ", height: " + height + ", duration: " + duration +
                             ", thumb: " + thumb + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"

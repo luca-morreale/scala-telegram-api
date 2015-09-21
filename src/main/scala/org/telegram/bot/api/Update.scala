@@ -24,18 +24,20 @@ import org.json4s.JValue
  *
  */
 
-class Update(json: JValue) {
+class Update(json: JValue) extends Ordered[Update] {
 
-    /**
-     * The update‘s unique identifier.
-     * Update identifiers start from a certain positive number and increase sequentially.
-     * This ID becomes especially handy if you’re using Webhooks,
-     * since it allows you to ignore repeated updates or to restore the
-     * correct update sequence, should they get out of order.
-     */
-    val updateID: Long = (json \ Update.UPDATEID_FIELD).extract[Long]
+    val updateID: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
 
     val message: Option[Message] = if(json \ Update.MESSAGE_FIELD != None) Some(new Message(json \ Update.MESSAGE_FIELD)) else None
+
+    /**
+     * ========================================================
+     *
+     *
+     * ========================================================
+     */
+
+    def compare(that: Update): Int = updateID - that.updateID
 
     override def toString():String = "Update [update_id: " + updateID + ", " + message + "]"
 }

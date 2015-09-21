@@ -28,7 +28,9 @@ case class Sticker(
         val height: Int,
         val thumb: Option[PhotoSize],
         val file_size: Option[Int]
-        ) {
+                    ) extends Ordered[Sticker] {
+
+    def compare(that: Sticker):Int = file_id compareTo that.file_id
 
     override def toString(): String = "Sticker [file_id: " + file_id + ", width: " + width + ", height: " + height +
                             ", thumb: " + thumb + ", file_size: " + file_size + "]"

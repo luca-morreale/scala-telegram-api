@@ -29,7 +29,10 @@ case class Audio (
         val title: Option[String],
         val mime_type: Option[String],
         val file_size: Option[Int]
-        ) {
+                )  extends Ordered[Audio] {
+
+    def compare(that: Audio):Int = file_id compareTo that.file_id
+
     override def toString():String = "Audio [file_id: " + file_id + ", duration: " + duration + ", performer: " + performer +
                                     ", title: " + title + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"
 }

@@ -23,11 +23,13 @@ package org.telegram.bot.api
  */
 
 case class User(
-        val id: Long,
+        val id: Int,
         val first_name: String,
         val last_name: Option[String],
         val username: Option[String]
-        ) {
+                ) extends Ordered[User] {
+
+    def compare(that: User):Int = id - that.id
 
     override def toString(): String = "User [id: " + id + ", first_name: " + first_name + ", last_name: " + last_name +
                                 ", username: " + username + "]"
