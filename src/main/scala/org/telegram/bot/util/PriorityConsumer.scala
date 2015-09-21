@@ -16,24 +16,24 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
-import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.PriorityBlockingQueue
 
 /**
  *
  */
 
-trait Consumer[T] extends Coroutine {
+trait PriorityConsumer[T <: Ordered[T]] extends Consumer[T] {
 
     private val capacity = 100
-    private val inputs = new LinkedBlockingQueue[T](capacity)
+    private val inputs = new PriorityBlockingQueue[T](capacity)
 
-    def accept (input: T):Unit = {
+    override def accept (input: T):Unit = {
         inputs put input
     }
 
-    protected def get(): T = {
+    override protected def get(): T = {
         inputs.take
     }
 

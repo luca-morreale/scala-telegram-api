@@ -16,23 +16,21 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
 /**
  *
  */
 
-case class Video(
+case class Sticker(
         val file_id: String,
         val width: Int,
-        val height:  Int,
-        val duration: Int,
+        val height: Int,
         val thumb: Option[PhotoSize],
-        val mime_type: Option[String],
         val file_size: Option[Int]
         ) {
 
-    override def toString(): String = "Video [file_id: " + file_id + ", width: " + width + ", height: " + height + ", duration: " + duration +
-                            ", thumb: " + thumb + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"
+    override def toString(): String = "Sticker [file_id: " + file_id + ", width: " + width + ", height: " + height +
+                            ", thumb: " + thumb + ", file_size: " + file_size + "]"
 }
 

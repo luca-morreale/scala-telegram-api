@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
 import org.apache.http.HttpResponse
 import org.apache.http.client.ClientProtocolException

@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
 import org.json4s.JValue
 import org.json4s.JField

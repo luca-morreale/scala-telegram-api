@@ -16,20 +16,16 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
 /**
  *
  */
 
-case class User(
-        val id: Long,
-        val first_name: String,
-        val last_name: Option[String],
-        val username: Option[String]
+case class Location(
+        val longitude: Float,
+        val latitude: Float
         ) {
 
-    override def toString(): String = "User [id: " + id + ", first_name: " + first_name + ", last_name: " + last_name +
-                                ", username: " + username + "]"
+    override def toString(): String = "Location [longitude: " + longitude + ", latitude: " + latitude + "]"
 }
-

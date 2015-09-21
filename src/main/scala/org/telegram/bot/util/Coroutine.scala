@@ -16,23 +16,16 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.util
 
 /**
- *
+ * Base trait for concurrent action.
  */
 
-case class Chat(
-        val id: Int,
-        val title: Option[String],
-        val first_name: Option[String],
-        val last_name: Option[String],
-        val username: Option[String]
-        ) {
+trait Coroutine extends Runnable {
 
-    def isGroupChat():Boolean = id < 0
-
-    override def toString(): String = "Chat [id: " + id + ", title: " + title + ", first_name: " + first_name +
-                                    ", last_name: " + last_name + ", username: " + username + "]"
+    def start(): Unit = {
+        val thread = new Thread(this)
+        thread.start
+    }
 }
-

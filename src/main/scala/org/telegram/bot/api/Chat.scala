@@ -16,25 +16,23 @@
  *
  */
 
-package org.telegram.util
-
-import java.util.concurrent.PriorityBlockingQueue
+package org.telegram.bot.api
 
 /**
  *
  */
 
-trait PriorityConsumer[T <: Ordered[T]] extends Coroutine {
+case class Chat(
+        val id: Int,
+        val title: Option[String],
+        val first_name: Option[String],
+        val last_name: Option[String],
+        val username: Option[String]
+        ) {
 
-    private val capacity = 100
-    private val inputs = new PriorityBlockingQueue[T](capacity)
+    def isGroupChat():Boolean = id < 0
 
-    def accept (input: T):Unit = {
-        inputs put input
-    }
-
-    protected def get(): T = {
-        inputs.take
-    }
-
+    override def toString(): String = "Chat [id: " + id + ", title: " + title + ", first_name: " + first_name +
+                                    ", last_name: " + last_name + ", username: " + username + "]"
 }
+

@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
 import java.util.concurrent.LinkedBlockingQueue
 

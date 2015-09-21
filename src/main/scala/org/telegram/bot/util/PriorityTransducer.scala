@@ -16,21 +16,10 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.util
 
 /**
  *
  */
 
-case class Sticker(
-        val file_id: String,
-        val width: Int,
-        val height: Int,
-        val thumb: Option[PhotoSize],
-        val file_size: Option[Int]
-        ) {
-
-    override def toString(): String = "Sticker [file_id: " + file_id + ", width: " + width + ", height: " + height +
-                            ", thumb: " + thumb + ", file_size: " + file_size + "]"
-}
-
+trait PriorityTransducer[I<: Ordered[I], O <: Ordered[O]] extends Transducer[I, O]

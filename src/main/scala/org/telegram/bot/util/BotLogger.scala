@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
 import java.io.BufferedWriter
 import java.io.File

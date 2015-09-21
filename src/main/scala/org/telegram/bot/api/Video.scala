@@ -16,20 +16,23 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
 /**
  *
  */
 
-case class Voice(
+case class Video(
         val file_id: String,
+        val width: Int,
+        val height:  Int,
         val duration: Int,
+        val thumb: Option[PhotoSize],
         val mime_type: Option[String],
         val file_size: Option[Int]
         ) {
 
-    override def toString(): String = "Voice [file_id: " + file_id + ", duration: " + duration + ", mime_type: " + mime_type +
-                            ", file_size: " + file_size + "]"
+    override def toString(): String = "Video [file_id: " + file_id + ", width: " + width + ", height: " + height + ", duration: " + duration +
+                            ", thumb: " + thumb + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"
 }
 

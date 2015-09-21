@@ -16,20 +16,25 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.util
+
+import java.util.concurrent.LinkedBlockingQueue
 
 /**
  *
  */
 
-case class Contact (
-        val phone_number: String,
-        val first_name: String,
-        val last_name: Option[String],
-        val user_id: Option[Int]
-        ) {
+trait Consumer[T] extends Coroutine {
 
-    override def toString(): String = "Contact [phone_number: " + phone_number + ", first_name: " + first_name +
-                                    ", last_name: " + last_name + "user_id: " + user_id + "]"
+    private val capacity = 100
+    private val inputs = new LinkedBlockingQueue[T](capacity)
+
+    def accept (input: T):Unit = {
+        inputs put input
+    }
+
+    protected def get(): T = {
+        inputs.take
+    }
 
 }

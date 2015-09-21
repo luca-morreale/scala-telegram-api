@@ -16,10 +16,12 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
 /**
- *
+ * An I,O-transducer consumes
+ * type-I objects and produces
+ * type-O objects.
  */
 
-trait PriorityTransducer[I<: Ordered[I], O <: Ordered[O]] extends PriorityConsumer[I] with PriorityProducer[O]
+trait Transducer[I,O] extends Consumer[I] with Producer[O]

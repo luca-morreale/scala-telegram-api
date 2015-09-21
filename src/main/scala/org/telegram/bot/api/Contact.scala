@@ -16,16 +16,20 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
 /**
  *
  */
 
-case class Location(
-        val longitude: Float,
-        val latitude: Float
+case class Contact (
+        val phone_number: String,
+        val first_name: String,
+        val last_name: Option[String],
+        val user_id: Option[Int]
         ) {
 
-    override def toString(): String = "Location [longitude: " + longitude + ", latitude: " + latitude + "]"
+    override def toString(): String = "Contact [phone_number: " + phone_number + ", first_name: " + first_name +
+                                    ", last_name: " + last_name + "user_id: " + user_id + "]"
+
 }

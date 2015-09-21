@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.util
 
 import java.util.concurrent.PriorityBlockingQueue
 
@@ -24,18 +24,37 @@ import java.util.concurrent.PriorityBlockingQueue
  *
  */
 
-trait PriorityProducer[T <: Ordered[T]] extends Coroutine {
+trait PriorityProducer[T <: Ordered[T]] extends Producer[T] {
 
     private val capacity = 100
     private val outputs = new PriorityBlockingQueue[T](capacity)
 
-    protected def put(output: T): Unit = {
+    override protected def put(output: T): Unit = {
         outputs put output
     }
 
-    def next(): T = outputs.take
+    override def next(): T = outputs.take
 
-    def ==>(consumer: Consumer[T]): Coroutine = {
+    def ==>(consumer: PriorityConsumer[T]): Coroutine = {
+        val that = this
+
+        new Coroutine {
+            override def run():Unit = {
+                while (true) {
+                    val message = that.next
+                    consumer accept message
+                }
+            }
+
+            override def start(): Unit = {
+                that.start
+                consumer.start
+                super.start
+            }
+        }
+    }
+
+    override def ==>(consumer: Consumer[T]): Coroutine = {
         val that = this
 
         new Coroutine {

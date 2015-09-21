@@ -16,12 +16,20 @@
  *
  */
 
-package org.telegram.util
+package org.telegram.bot.api
 
 /**
- * An I,O-transducer consumes
- * type-I objects and produces
- * type-O objects.
+ *
  */
 
-trait Transducer[I,O] extends Consumer[I] with Producer[O]
+case class Voice(
+        val file_id: String,
+        val duration: Int,
+        val mime_type: Option[String],
+        val file_size: Option[Int]
+        ) {
+
+    override def toString(): String = "Voice [file_id: " + file_id + ", duration: " + duration + ", mime_type: " + mime_type +
+                            ", file_size: " + file_size + "]"
+}
+

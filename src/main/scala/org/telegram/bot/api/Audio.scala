@@ -16,32 +16,20 @@
  *
  */
 
-package org.telegram
-
-import org.json4s.DefaultFormats
-import org.json4s.JValue
-import org.json4s.JField
+package org.telegram.bot.api
 
 /**
  *
  */
 
-package object api {
-
-    /**
-     *  Brings in default formats for parsing json
-     */
-    implicit val formats = DefaultFormats
-
-    /**
-     *
-     */
-    def fieldExists(json: JValue, field: String): Boolean = {
-        val value = json findField {
-                    case JField(field, _) => true
-                    case _ => false
-                }
-        value != Option(None)
-    }
-
+case class Audio (
+        val file_id: String,
+        val duration: Int,
+        val performer: Option[String],
+        val title: Option[String],
+        val mime_type: Option[String],
+        val file_size: Option[Int]
+        ) {
+    override def toString():String = "Audio [file_id: " + file_id + ", duration: " + duration + ", performer: " + performer +
+                                    ", title: " + title + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"
 }

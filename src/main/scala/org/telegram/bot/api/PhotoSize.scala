@@ -16,20 +16,20 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot.api
 
-/**
+/*
  *
  */
 
-case class Audio (
+case class PhotoSize (
         val file_id: String,
-        val duration: Int,
-        val performer: Option[String],
-        val title: Option[String],
-        val mime_type: Option[String],
+        val width: Int,
+        val height: Int,
         val file_size: Option[Int]
         ) {
-    override def toString():String = "Audio [file_id: " + file_id + ", duration: " + duration + ", performer: " + performer +
-                                    ", title: " + title + ", mime_type: " + mime_type + ", file_size: " + file_size + "]"
+
+    override def toString(): String = "PhotoSize [file_id: " + file_id + ", width: " + width + ", height: " + height +
+                                ", file_size: " + file_size + "]"
 }
+

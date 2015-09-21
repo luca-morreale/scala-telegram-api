@@ -16,21 +16,32 @@
  *
  */
 
-package org.telegram.api
+package org.telegram.bot
+
+import org.json4s.DefaultFormats
+import org.json4s.JValue
+import org.json4s.JField
 
 /**
  *
  */
 
-case class Document(
-        val file_id: String,
-        val thumb: Option[PhotoSize],
-        val file_name: Option[String],
-        val mime_type: Option[String],
-        val file_size: Option[Int]
-        ) {
+package object api {
 
-    override def toString(): String = "Document [file_id: " + file_id + ", thumb: " + thumb + ", file_name: " + file_name +
-                                    ", mime_type: "  + mime_type + ", file_size: " + file_size + "]"
+    /**
+     *  Brings in default formats for parsing json
+     */
+    implicit val formats = DefaultFormats
+
+    /**
+     *
+     */
+    def fieldExists(json: JValue, field: String): Boolean = {
+        val value = json findField {
+                    case JField(field, _) => true
+                    case _ => false
+                }
+        value != Option(None)
+    }
 
 }
