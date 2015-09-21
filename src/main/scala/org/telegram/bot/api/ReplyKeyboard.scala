@@ -16,36 +16,12 @@
  *
  */
 
-package org.telegram.bot.api
+package org.telegram.bot.api;
 
 import org.json4s.JValue
 
-/**
- *
- */
 
-class Update(json: JValue) extends Ordered[Update] {
+trait ReplyKeyboard {
 
-    val updateID: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
-
-    val message: Option[Message] = if(json \ Update.MESSAGE_FIELD != None) Some(new Message(json \ Update.MESSAGE_FIELD)) else None
-
-    /**
-     * ========================================================
-     *
-     *
-     * ========================================================
-     */
-
-    def compare(that: Update): Int = updateID - that.updateID
-
-    override def toString():String = "Update [update_id: " + updateID + ", " + message + "]"
-}
-
-protected object Update {
-
-    val UPDATEID_FIELD = "update_id"
-
-    val MESSAGE_FIELD = "message"
-
+    def toJson(): JValue;
 }
