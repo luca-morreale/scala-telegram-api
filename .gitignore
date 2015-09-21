@@ -1,0 +1,7 @@
+.cache-main
+.project
+.settings/
+scalastyle-config.xml
+target/
+bin/
+/bin/
