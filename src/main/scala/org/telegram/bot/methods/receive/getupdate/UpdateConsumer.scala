@@ -16,36 +16,29 @@
  *
  */
 
-package org.telegram.bot.api
+package org.telegram.bot.methods.receive.getupdate
 
-import org.json4s.JValue
+import org.telegram.bot.util.Consumer
+import org.telegram.bot.api.Update
 
 /**
  *
  */
 
-class Update(json: JValue) extends Ordered[Update] {
+class UpdateConsumer extends Consumer[Update] {
 
-    val updateID: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
+    var callbacks: List[Update => Unit] = Nil
 
-    val message: Option[Message] = if(fieldExists(json, Update.MESSAGE_FIELD)) Some(new Message(json \ Update.MESSAGE_FIELD)) else None
+    def run(): Unit = {
+        while(true) {
 
-    /**
-     * ========================================================
-     *
-     *
-     * ========================================================
-     */
+            val update = this.get
+            callbacks.foreach(callback => callback(update))
+        }
+    }
 
-    def compare(that: Update): Int = updateID - that.updateID
+    def addCallback(callback: Update => Unit):Unit = callbacks ::= callback
 
-    override def toString():String = "Update [update_id: " + updateID + ", " + message + "]"
-}
-
-protected object Update {
-
-    val UPDATEID_FIELD = "update_id"
-
-    val MESSAGE_FIELD = "message"
+    def removeCallback(callback: Update => Unit):Unit = callbacks = callbacks filterNot callback.eq
 
 }

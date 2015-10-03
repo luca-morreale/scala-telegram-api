@@ -16,12 +16,12 @@
  *
  */
 
-package org.telegram.bot.util
+package org.telegram.bot.methods
 
 import org.apache.http.HttpResponse
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.ResponseHandler
-import org.apache.http.util.EntityUtils;
+import org.apache.http.util.EntityUtils
 import org.apache.http.entity.BufferedHttpEntity;
 
 /**
