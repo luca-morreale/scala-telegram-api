@@ -38,62 +38,43 @@ class Message(json: JValue) extends Ordered[Message] {
 
     val chat: Chat = (json \ Message.CHAT_FIELD).extract[Chat]
 
-    val forward_from: Option[User] =
-            if (fieldExists(json, Message.FORWARDFROM_FIELD)) Some((json \ Message.FORWARDFROM_FIELD).extract[User]) else None
+    val forward_from: Option[User] = extractAPI[User](json, Message.FORWARDFROM_FIELD)
 
-    val forward_date: Option[Int] =
-            if (fieldExists(json, Message.FORWARDDATE_FIELD)) Some((json \ Message.FORWARDDATE_FIELD).extract[Int]) else None
+    val forward_date: Option[Int] = extractAPI[Int](json, Message.FORWARDDATE_FIELD)
 
-    val text: Option[String] =
-            if (fieldExists(json, Message.TEXT_FIELD)) Some((json \ Message.TEXT_FIELD).extract[String]) else None
+    val text: Option[String] = extractAPI[String](json, Message.TEXT_FIELD)
 
-    val audio: Option[Audio] =
-            if (fieldExists(json, Message.AUDIO_FIELD)) Some((json \ Message.AUDIO_FIELD).extract[Audio]) else None
+    val audio: Option[Audio] = extractAPI[Audio](json, Message.AUDIO_FIELD)
 
-    val document: Option[Document] =
-            if (fieldExists(json, Message.DOCUMENT_FIELD)) Some((json \ Message.DOCUMENT_FIELD).extract[Document]) else None
+    val document: Option[Document] = extractAPI[Document](json, Message.DOCUMENT_FIELD)
 
-    val photo: Option[List[PhotoSize]] =
-            if (fieldExists(json, Message.PHOTO_FIELD)) Some((json \ Message.PHOTO_FIELD).extract[List[PhotoSize]]) else None
+    val photo: Option[List[PhotoSize]] = extractAPI[List[PhotoSize]](json, Message.PHOTO_FIELD)
 
-    val sticker: Option[Sticker] =
-            if (fieldExists(json, Message.STICKER_FIELD)) Some((json \ Message.STICKER_FIELD).extract[Sticker]) else None
+    val sticker: Option[Sticker] = extractAPI[Sticker](json, Message.STICKER_FIELD)
 
-    val video: Option[Video] =
-            if (fieldExists(json, Message.VIDEO_FIELD)) Some((json \ Message.VIDEO_FIELD).extract[Video]) else None
+    val video: Option[Video] = extractAPI[Video](json, Message.VIDEO_FIELD)
 
-    val voice: Option[Voice] =
-            if (fieldExists(json, Message.VOICE_FIELD)) Some((json \ Message.VOICE_FIELD).extract[Voice]) else None
+    val voice: Option[Voice] = extractAPI[Voice](json, Message.VOICE_FIELD)
 
-    val caption: Option[String] =
-            if (fieldExists(json, Message.CAPTION_FIELD)) Some((json \ Message.CAPTION_FIELD).extract[String]) else None
+    val caption: Option[String] = extractAPI[String](json, Message.CAPTION_FIELD)
 
-    val contact: Option[Contact] =
-            if (fieldExists(json, Message.CONTACT_FIELD)) Some((json \ Message.CONTACT_FIELD).extract[Contact]) else None
+    val contact: Option[Contact] = extractAPI[Contact](json, Message.CONTACT_FIELD)
 
-    val location: Option[Location] =
-            if (fieldExists(json, Message.LOCATION_FIELD)) Some((json \ Message.LOCATION_FIELD).extract[Location]) else None
+    val location: Option[Location] = extractAPI[Location](json, Message.LOCATION_FIELD)
 
-    val new_chat_participant: Option[User] =
-            if (fieldExists(json, Message.NEWCHATPARTICIPANT_FIELD)) Some((json \ Message.NEWCHATPARTICIPANT_FIELD).extract[User]) else None
+    val new_chat_participant: Option[User] = extractAPI[User](json, Message.NEWCHATPARTICIPANT_FIELD)
 
-    val left_chat_participant: Option[User] =
-            if (fieldExists(json, Message.LEFTCHATPARTICIPANT_FIELD)) Some((json \ Message.LEFTCHATPARTICIPANT_FIELD).extract[User]) else None
+    val left_chat_participant: Option[User] = extractAPI[User](json, Message.LEFTCHATPARTICIPANT_FIELD)
 
-    val reply_to_message: Option[Message] =
-            if (fieldExists(json, Message.REPLYTOMESSAGE_FIELD)) Some((json \ Message.REPLYTOMESSAGE_FIELD).extract[Message]) else None
+    val reply_to_message: Option[Message] = extractAPI[Message](json, Message.REPLYTOMESSAGE_FIELD)
 
-    val new_chat_title: Option[String] =
-            if (fieldExists(json, Message.NEWCHATTITLE_FIELD)) Some((json \ Message.NEWCHATTITLE_FIELD).extract[String]) else None
+    val new_chat_title: Option[String] = extractAPI[String](json, Message.NEWCHATTITLE_FIELD)
 
-    val new_chat_photo: Option[List[PhotoSize]]  =
-            if (fieldExists(json, Message.NEWCHATPHOTO_FIELD)) Some((json \ Message.NEWCHATPHOTO_FIELD).extract[List[PhotoSize]]) else None
+    val new_chat_photo: Option[List[PhotoSize]] = extractAPI[List[PhotoSize]](json, Message.NEWCHATPHOTO_FIELD)
 
-    val delete_chat_photo: Option[Boolean] =
-            if (fieldExists(json, Message.DELETECHATPHOTO_FIELD)) Some((json \ Message.DELETECHATPHOTO_FIELD).extract[Boolean]) else None
+    val delete_chat_photo: Option[Boolean] = extractAPI[Boolean](json, Message.DELETECHATPHOTO_FIELD)
 
-    val group_chat_created: Option[Boolean] =
-            if (fieldExists(json, Message.GROUPCHATCREATED_FIELD)) Some((json \ Message.GROUPCHATCREATED_FIELD).extract[Boolean]) else None
+    val group_chat_created: Option[Boolean] = extractAPI[Boolean](json, Message.GROUPCHATCREATED_FIELD)
 
     /**
      * ========================================================

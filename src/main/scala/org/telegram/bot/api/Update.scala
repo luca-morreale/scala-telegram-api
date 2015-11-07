@@ -28,7 +28,7 @@ class Update(json: JValue) extends Ordered[Update] {
 
     val updateID: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
 
-    val message: Option[Message] = if(fieldExists(json, Update.MESSAGE_FIELD)) Some(new Message(json \ Update.MESSAGE_FIELD)) else None
+    val message: Option[Message] = apiFromJson[Message](json, Update.MESSAGE_FIELD)
 
     /**
      * ========================================================
