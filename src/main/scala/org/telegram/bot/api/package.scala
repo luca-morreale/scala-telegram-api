@@ -66,6 +66,17 @@ package object api {
     }
 
     /**
+     *
+     *
+     */
+    def extractAPI[API: Manifest](json: JValue, field: String): Option[API] = {
+        if (fieldExists(json, field))
+            Some((json \ field).extract[API])
+        else
+            None
+    }
+
+    /**
      * Dynamically parse the json creating the given class using reflection package.
      */
     def apiFromJson[API: TypeTag](json: JValue, field: String): Option[API] = {
