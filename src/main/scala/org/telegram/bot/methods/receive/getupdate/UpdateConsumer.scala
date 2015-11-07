@@ -27,7 +27,7 @@ import org.telegram.bot.api.Update
 
 class UpdateConsumer extends Consumer[Update] {
 
-    var callbacks: List[Update => Unit] = Nil
+    private var callbacks: List[Update => Unit] = Nil
 
     def run(): Unit = {
         while(true) {
