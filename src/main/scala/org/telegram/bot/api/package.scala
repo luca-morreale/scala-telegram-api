@@ -30,6 +30,7 @@ import scala.reflect.runtime.universe.runtimeMirror
 import org.json4s.DefaultFormats
 import org.json4s.JField
 import org.json4s.JValue
+import org.json4s.JNothing
 
 /**
  *
@@ -57,13 +58,7 @@ package object api {
     /**
      * Checks whether exits a field in the json value
      */
-    def fieldExists(json: JValue, field: String): Boolean = {
-        val value = json findField {
-                    case JField(field, _) => true
-                    case _ => false
-                }
-        value != Option(None)
-    }
+    def fieldExists(json: JValue, field: String): Boolean = (json\field) != JNothing
 
     /**
      *
