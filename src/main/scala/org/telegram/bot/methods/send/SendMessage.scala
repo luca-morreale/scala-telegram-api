@@ -44,11 +44,15 @@ import org.telegram.bot.methods.generateHttpPost
  *
  */
 
-class MessageConsumer(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] with TelegramInformation {
-    private val log = BotLogger.getLogger(classOf[MessageConsumer].getName)
+class SendMessage(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] with TelegramInformation {
+
+    private val log = BotLogger.getLogger(classOf[SendMessage].getName)
+
+    val path = "sendmessage"
 
     private val httpClient = HttpClientBuilder.create.setSSLHostnameVerifier(new NoopHostnameVerifier).build
-    private val url = telegramPath + token + "/" + outgoingMessagePath
+
+    private val url = telegramPath + token + "/" + path
 
     override def run():Unit = {
 

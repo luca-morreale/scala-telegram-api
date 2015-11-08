@@ -26,8 +26,4 @@ trait TelegramInformation {
 
     val telegramPath = "https://api.telegram.org/bot"
 
-    val outgoingMessagePath = "sendmessage"
-
-    val getMessagePath = "getupdates"
-
 }

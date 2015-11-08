@@ -20,35 +20,30 @@ package org.telegram.bot.methods.receive.getupdate
 
 import java.util.concurrent.TimeUnit
 
-import org.apache.http.NameValuePair
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.client.ClientProtocolException
+import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.NameValuePair
+
+import org.telegram.bot.api.Update
+import org.telegram.bot.util.BotLogger
+import org.telegram.bot.TelegramInformation
+import org.telegram.bot.util.PriorityProducer
+import org.telegram.bot.methods.AnswerHandler
+import org.telegram.bot.methods.generateHttpPost
 
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.string2JsonInput
-
-import org.telegram.bot.TelegramInformation
-import org.telegram.bot.methods.BaseMethod
-import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.methods.AnswerHandler
-import org.telegram.bot.util.Producer
-import org.telegram.bot.util.BotLogger
-import org.telegram.bot.api.Update
-
+import org.json4s.jvalue2monadic
 
 
 /**
  *
  */
 
-class UpdateProducer(
-        token: String,
-        initialOffset: Int = 0,
-        timeout: Int = 20) extends BaseMethod(token)
-                            with Producer[Update]
-                            with TelegramInformation {
+class UpdateProducer(token: String, path: String, initialOffset: Int = 0, timeout: Int = 20)
+                                extends PriorityProducer[Update] with TelegramInformation {
 
     private val log = BotLogger.getLogger(classOf[UpdateProducer].getName)
 
@@ -56,13 +51,13 @@ class UpdateProducer(
                                 .setSSLHostnameVerifier(new NoopHostnameVerifier)
                                 .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
 
-    private val url = telegramPath + token + "/" + getMessagePath
+    private val url = telegramPath + token + "/" + path
     private var offset = initialOffset
 
     def run(): Unit = {
         while(true) {
 
-            val pairs = GetUpdates.buildValuePairs
+            val pairs = buildValuePairs(offset, 100, timeout)
             val httpPost = generateHttpPost(url, pairs)
 
             debug(httpPost, pairs)
@@ -112,5 +107,4 @@ class UpdateProducer(
         log.debug(http.toString)
         log.debug(nameValuePairs.toString)
     }
-
 }
