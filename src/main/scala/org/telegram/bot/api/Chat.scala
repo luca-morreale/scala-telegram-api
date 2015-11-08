@@ -24,7 +24,7 @@ import org.json4s.JValue
  *
  */
 
-class Chat(json: JValue) extends Ordered[Chat] {
+class Chat(json: JValue) extends Ordered[Chat] with APIClass {
 
     val id: Int = (json \ "id").extract[Int]
 

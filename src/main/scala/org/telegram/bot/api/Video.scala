@@ -30,7 +30,7 @@ case class Video(
         val thumb: Option[PhotoSize],
         val mime_type: Option[String],
         val file_size: Option[Int]
-                )  extends Ordered[Video] {
+                )  extends Ordered[Video] with APIClass {
 
     def compare(that: Video):Int = file_id compareTo that.file_id
 

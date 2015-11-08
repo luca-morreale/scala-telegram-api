@@ -27,7 +27,7 @@ case class PhotoSize (
         val width: Int,
         val height: Int,
         val file_size: Option[Int]
-                    ) extends Ordered[PhotoSize] {
+                    ) extends Ordered[PhotoSize] with APIClass {
 
     def compare(that: PhotoSize):Int = file_id compareTo that.file_id
 

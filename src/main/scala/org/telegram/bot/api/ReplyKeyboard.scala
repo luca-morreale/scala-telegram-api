@@ -21,7 +21,7 @@ package org.telegram.bot.api;
 import org.json4s.JValue
 
 
-trait ReplyKeyboard {
+trait ReplyKeyboard extends APIClass {
 
     def toJson(): JValue;
 }

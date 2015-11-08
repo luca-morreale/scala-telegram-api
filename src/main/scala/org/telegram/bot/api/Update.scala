@@ -24,7 +24,7 @@ import org.json4s.JValue
  *
  */
 
-class Update(json: JValue) extends Ordered[Update] {
+class Update(json: JValue) extends Ordered[Update] with APIClass {
 
     val update_id: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
 

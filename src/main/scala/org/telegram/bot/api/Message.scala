@@ -28,7 +28,7 @@ import java.util.Date
  */
 
 
-class Message(json: JValue) extends Ordered[Message] {
+class Message(json: JValue) extends Ordered[Message] with APIClass {
 
     val message_id: Int = (json \ Message.MESSAGEID_FIELD).extract[Int]
 

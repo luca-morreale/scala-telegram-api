@@ -21,18 +21,4 @@ package org.telegram.bot.api
 /**
  *
  */
-
-case class Document(
-        val file_id: String,
-        val thumb: Option[PhotoSize],
-        val file_name: Option[String],
-        val mime_type: Option[String],
-        val file_size: Option[Int]
-                    ) extends Ordered[Document] with APIClass {
-
-    def compare(that: Document):Int = file_id compareTo that.file_id
-
-    override def toString(): String = "Document [file_id: " + file_id + ", thumb: " + thumb + ", file_name: " + file_name +
-                                    ", mime_type: "  + mime_type + ", file_size: " + file_size + "]"
-
-}
+trait APIClass

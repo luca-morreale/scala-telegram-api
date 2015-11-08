@@ -27,7 +27,7 @@ case class Contact (
         val first_name: String,
         val last_name: Option[String],
         val user_id: Option[Int]
-                   ) extends Ordered[Contact] {
+                   ) extends Ordered[Contact] with APIClass {
 
     def compare(that: Contact):Int = phone_number compareTo that.phone_number
 

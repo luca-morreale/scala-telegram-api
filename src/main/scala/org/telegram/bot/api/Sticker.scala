@@ -28,7 +28,7 @@ case class Sticker(
         val height: Int,
         val thumb: Option[PhotoSize],
         val file_size: Option[Int]
-                    ) extends Ordered[Sticker] {
+                    ) extends Ordered[Sticker] with APIClass {
 
     def compare(that: Sticker):Int = file_id compareTo that.file_id
 

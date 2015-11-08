@@ -27,7 +27,7 @@ case class User(
         val first_name: String,
         val last_name: Option[String],
         val username: Option[String]
-                ) extends Ordered[User] {
+                ) extends Ordered[User] with APIClass {
 
     def compare(that: User):Int = id - that.id
 

@@ -33,7 +33,7 @@ import org.json4s.jvalue2monadic
  * Upon receiving a message with this object, Telegram clients will display a reply interface to the user
  */
 
-class ForceReplyKeyboard(json: JValue) extends ReplyKeyboard  {
+class ForceReplyKeyboard(json: JValue) extends ReplyKeyboard {
 
     /**
      * Shows reply interface to the user, as if they manually selected the bot‘s message and tapped ’Reply'
