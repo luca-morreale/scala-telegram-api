@@ -36,7 +36,7 @@ class Message(json: JValue) extends Ordered[Message] {
 
     val date: Int = (json \ Message.DATE_FIELD).extract[Int]
 
-    val chat: Chat = (json \ Message.CHAT_FIELD).extract[Chat]
+    val chat: Chat = apiFromJson[Chat](json, Message.CHAT_FIELD).get
 
     val forward_from: Option[User] = extractAPI[User](json, Message.FORWARDFROM_FIELD)
 
@@ -100,6 +100,40 @@ class Message(json: JValue) extends Ordered[Message] {
     def isReply():Boolean = this.reply_to_message != None
 
     def hasLocation():Boolean = location != None
+
+    override def equals(other: Any): Boolean = {
+        other match {
+            case o: Message => compare(o) == 0
+            case _ => false
+        }
+    }
+
+    override def hashCode(): Int = {
+        val prime = 92821
+        var result = message_id
+        result = result * prime + from.hashCode
+        result = result * prime + date
+        result = result * prime + chat.hashCode
+        result = result * prime + forward_from.hashCode
+        result = result * prime + forward_date.hashCode
+        result = result * prime + text.hashCode
+        result = result * prime + audio.hashCode
+        result = result * prime + document.hashCode
+        result = result * prime + photo.hashCode
+        result = result * prime + sticker.hashCode
+        result = result * prime + video.hashCode
+        result = result * prime + voice.hashCode
+        result = result * prime + caption.hashCode
+        result = result * prime + contact.hashCode
+        result = result * prime + location.hashCode
+        result = result * prime + new_chat_participant.hashCode
+        result = result * prime + left_chat_participant.hashCode
+        result = result * prime + reply_to_message.hashCode
+        result = result * prime + new_chat_title.hashCode
+        result = result * prime + new_chat_photo.hashCode
+        result = result * prime + delete_chat_photo.hashCode
+        result * prime + group_chat_created.hashCode
+    }
 
     def compare(that: Message): Int = {
         if(date - that.date == 0) {

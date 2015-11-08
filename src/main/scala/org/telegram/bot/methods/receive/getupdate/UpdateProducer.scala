@@ -90,12 +90,12 @@ class UpdateProducer(
     }
 
     private def addUpdatesToQueue(updateList: List[Update]) = {
-        updateList.filter(_.updateID > offset).foreach { this.put(_) }
+        updateList.filter(_.update_id > offset).foreach { this.put(_) }
     }
 
     private def updateOffset(updateList: List[Update]) = {
-        val off = updateList.filter{ x => updateList.forall(_.updateID <= x.updateID) }
-        offset = if(off.length > 0) off(0).updateID else offset
+        val off = updateList.filter{ x => updateList.forall(_.update_id <= x.update_id) }
+        offset = if(off.length > 0) off(0).update_id else offset
     }
 
     private def waitForUpdates() = {

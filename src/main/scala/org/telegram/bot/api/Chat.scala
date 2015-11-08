@@ -18,23 +18,48 @@
 
 package org.telegram.bot.api
 
+import org.json4s.JValue
+
 /**
  *
  */
 
-case class Chat(
-        val id: Int,
-        val title: Option[String],
-        val first_name: Option[String],
-        val last_name: Option[String],
-        val username: Option[String]
-                ) extends Ordered[Chat] {
+class Chat(json: JValue) extends Ordered[Chat] {
+
+    val id: Int = (json \ "id").extract[Int]
+
+    val chat_type: String = (json \ "type").extract[String]
+
+    val title: Option[String] = extractAPI[String](json, "title")
+
+    val first_name: Option[String] = extractAPI[String](json, "first_name")
+
+    val last_name: Option[String] = extractAPI[String](json, "last_name")
+
+    val username: Option[String] = extractAPI[String](json, "username")
+
+    override def equals(other: Any): Boolean = {
+        other match {
+            case o: Chat => compare(o) == 0
+            case _ => false
+        }
+    }
+
+    override def hashCode(): Int = {
+        val prime = 92821
+        var result = id
+        result = result * prime + chat_type.hashCode
+        result = result * prime + title.hashCode
+        result = result * prime + first_name.hashCode
+        result = result * prime + last_name.hashCode
+        result * prime + username.hashCode
+    }
 
     def compare(that: Chat):Int = id - that.id
 
-    def isGroupChat():Boolean = id < 0
+    def isGroupChat():Boolean = chat_type == "group"
 
-    override def toString(): String = "Chat [id: " + id + ", title: " + title + ", first_name: " + first_name +
-                                    ", last_name: " + last_name + ", username: " + username + "]"
+    override def toString(): String = "Chat [id: " + id + ", type: " + chat_type + ", title: " + title +
+                                    ", first_name: " + first_name + ", last_name: " + last_name + ", username: " + username + "]"
 }
 

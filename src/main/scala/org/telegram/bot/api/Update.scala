@@ -26,7 +26,7 @@ import org.json4s.JValue
 
 class Update(json: JValue) extends Ordered[Update] {
 
-    val updateID: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
+    val update_id: Int = (json \ Update.UPDATEID_FIELD).extract[Int]
 
     val message: Option[Message] = apiFromJson[Message](json, Update.MESSAGE_FIELD)
 
@@ -37,9 +37,22 @@ class Update(json: JValue) extends Ordered[Update] {
      * ========================================================
      */
 
-    def compare(that: Update): Int = updateID - that.updateID
+    override def equals(other: Any): Boolean = {
+        other match {
+            case o: Update => compare(o) == 0
+            case _ => false
+        }
+    }
 
-    override def toString():String = "Update [update_id: " + updateID + ", " + message + "]"
+    override def hashCode(): Int = {
+        val prime = 92821
+        var result = update_id
+        result * prime + message.hashCode
+    }
+
+    def compare(that: Update): Int = update_id - that.update_id
+
+    override def toString():String = "Update [update_id: " + update_id + ", " + message + "]"
 }
 
 protected object Update {

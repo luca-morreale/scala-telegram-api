@@ -5,3 +5,4 @@ scalastyle-config.xml
 target/
 bin/
 /bin/
+.cache-tests
