@@ -6,3 +6,5 @@ target/
 bin/
 /bin/
 .cache-tests
+.scalastyle
+scalastyle_configuration.xml

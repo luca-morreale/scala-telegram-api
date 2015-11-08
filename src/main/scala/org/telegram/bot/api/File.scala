@@ -29,4 +29,6 @@ case class File(
 
     def compare(that: File):Int = file_id compareTo that.file_id
 
+    override def toString(): String = "File [file_id: " + file_id + ", file_size: " + file_size +
+                        ", file_path: " + file_path + "]"
 }

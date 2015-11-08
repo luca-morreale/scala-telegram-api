@@ -72,10 +72,4 @@ class SendMessage(token: String) extends BaseMethod(token) with Consumer[Outgoin
             }
         }
     }
-
-    private def debug(http: HttpPost, nameValuePairs: List[NameValuePair]) = {
-        log.debug(http.toString)
-        log.debug(nameValuePairs.toString)
-    }
-
 }

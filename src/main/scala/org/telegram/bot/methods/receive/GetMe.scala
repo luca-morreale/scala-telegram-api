@@ -44,7 +44,7 @@ import org.json4s.JValue
 
 class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) with TelegramInformation {
 
-    private val log = BotLogger.getLogger(classOf[UpdateProducer].getName)
+    private val log = BotLogger.getLogger(classOf[GetMe].getName)
 
     val path = "getme"
 
@@ -62,7 +62,7 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token)
         try {
             val response = httpClient.execute(httpPost, new AnswerHandler)
             val json = parse(response) \ "result"
-            (json \ "user").extractOpt[User]
+            json.extractOpt[User]
         } catch {
             case cp: ClientProtocolException => None
         }
@@ -70,10 +70,11 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token)
 
     def checkToken(): Boolean = {
         val userOpt = request
-        if(userOpt == None)
+        if(userOpt == None) {
             false
-        else
+        }else {
             userOpt.get.id.toString == token.split(":")(0) &&
                 userOpt.get.first_name == name
+        }
     }
 }
