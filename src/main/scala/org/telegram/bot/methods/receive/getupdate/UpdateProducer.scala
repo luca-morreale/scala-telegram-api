@@ -57,7 +57,7 @@ class UpdateProducer(token: String, path: String, initialOffset: Int = 0, timeou
     def run(): Unit = {
         while(true) {
 
-            val pairs = buildValuePairs(offset, 100, timeout)
+            val pairs = generateUpdatePairs(offset, 100, timeout)
             val httpPost = generateHttpPost(url, pairs)
 
             debug(httpPost, pairs)

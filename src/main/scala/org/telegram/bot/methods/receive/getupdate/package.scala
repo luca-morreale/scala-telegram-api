@@ -1,4 +1,24 @@
+/*
+ *  Copyright (C) 2015  Morreale Luca
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.telegram.bot.methods.receive
+
+import org.telegram.bot.methods.buildValuePairs
 
 import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
@@ -10,8 +30,6 @@ import scala.collection.immutable.HashMap
  */
 
 package object getupdate {
-
-    val PATH = "getupdates"
 
     val OFFSET_FIELD = "offset"
 
@@ -25,23 +43,23 @@ package object getupdate {
 
     val defaultTimeout = 20
 
-    @volatile private var method = new UpdateCounter(defaultOffset, defaultLimit, defaultTimeout)
+    @volatile private var counter = new UpdateCounter(defaultOffset, defaultLimit, defaultTimeout)
 
-    def urlParams(): String = method.urlParams
+    def urlParams(): String = counter.urlParams
 
-    def buildValuePairs(): List[NameValuePair] = method.buildValuePairs
-
-    def buildValuePairs(offset: Int, limit: Int = method.limit, timeout: Int = method.timeout): List[NameValuePair] = {
-        method = new UpdateCounter(offset,limit, timeout)
-        buildValuePairs
+    def generateUpdatePairs(): List[NameValuePair] = {
+        buildValuePairs(HashMap(
+                getupdate.OFFSET_FIELD -> (counter.offset + 1).toString,
+                getupdate.LIMIT_FIELD -> counter.limit.toString,
+                getupdate.TIMEOUT_FIELD -> counter.timeout.toString
+            ))
     }
 
-    def buildValuePairs(pairs: HashMap[String, String]): List[NameValuePair] = {
-        val values = for{ value <- pairs }
-                    yield { new BasicNameValuePair(value._1, value._2) }
-
-        values.asInstanceOf[List[NameValuePair]]
+    def generateUpdatePairs(offset: Int, limit: Int = counter.limit, timeout: Int = counter.timeout): List[NameValuePair] = {
+        counter = new UpdateCounter(offset,limit, timeout)
+        generateUpdatePairs
     }
+
 }
 
 private class UpdateCounter(
@@ -70,14 +88,5 @@ private class UpdateCounter(
                 getupdate.defaultTimeout)
     }
 
-
     def urlParams(): String = "?" + getupdate.OFFSET_FIELD + "=" + offset
-
-    def buildValuePairs(): List[NameValuePair] = {
-        List(
-            new BasicNameValuePair(getupdate.OFFSET_FIELD, (offset + 1).toString),
-            new BasicNameValuePair(getupdate.LIMIT_FIELD, limit + ""),
-            new BasicNameValuePair(getupdate.TIMEOUT_FIELD, timeout + "")
-        )
-    }
 }
