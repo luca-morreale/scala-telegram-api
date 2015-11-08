@@ -35,10 +35,15 @@ package object methods {
      * @params nameValuePairs   post parameters
      */
     def generateHttpPost(url: String, nameValuePairs: List[NameValuePair]):HttpPost = {
+        val http = generateHttpPost(url)
+        http.setEntity(new UrlEncodedFormEntity(nameValuePairs.asJava, "UTF-8"))
+        http
+    }
+
+     def generateHttpPost(url: String):HttpPost = {
         val http = new HttpPost(url)
         http.addHeader("Content-type", "application/x-www-form-urlencoded")
         http.addHeader("charset", "UTF-8")
-        http.setEntity(new UrlEncodedFormEntity(nameValuePairs.asJava, "UTF-8"))
         http
     }
 }
