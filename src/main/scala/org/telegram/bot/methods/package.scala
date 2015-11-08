@@ -21,7 +21,10 @@ package org.telegram.bot
 import org.apache.http.NameValuePair
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpPost
+import org.apache.http.message.BasicNameValuePair
+
 import scala.collection.JavaConverters.seqAsJavaListConverter
+import scala.collection.immutable.HashMap
 
 /**
  *
@@ -45,5 +48,12 @@ package object methods {
         http.addHeader("Content-type", "application/x-www-form-urlencoded")
         http.addHeader("charset", "UTF-8")
         http
+    }
+
+    def buildValuePairs(pairs: HashMap[String, String]): List[NameValuePair] = {
+        val values = for{ value <- pairs }
+                    yield { new BasicNameValuePair(value._1, value._2) }
+
+        values.asInstanceOf[List[NameValuePair]]
     }
 }

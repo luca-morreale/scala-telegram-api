@@ -3,6 +3,8 @@ package org.telegram.bot.methods.receive
 import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
 
+import scala.collection.immutable.HashMap
+
 /**
  *
  */
@@ -32,6 +34,13 @@ package object getupdate {
     def buildValuePairs(offset: Int, limit: Int = method.limit, timeout: Int = method.timeout): List[NameValuePair] = {
         method = new UpdateCounter(offset,limit, timeout)
         buildValuePairs
+    }
+
+    def buildValuePairs(pairs: HashMap[String, String]): List[NameValuePair] = {
+        val values = for{ value <- pairs }
+                    yield { new BasicNameValuePair(value._1, value._2) }
+
+        values.asInstanceOf[List[NameValuePair]]
     }
 }
 
