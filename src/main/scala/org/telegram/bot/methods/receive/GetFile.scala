@@ -18,14 +18,11 @@
 
 package org.telegram.bot.methods.receive
 
-
-import org.telegram.bot.util.BotLogger
-import org.telegram.bot.methods.BaseMethod
-import org.telegram.bot.api.UserProfilePhotos
 import org.telegram.bot.methods.buildValuePairs
 import org.telegram.bot.methods.generateHttpPost
-
-import java.util.concurrent.TimeUnit
+import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.util.BotLogger
+import org.telegram.bot.api.File
 
 import scala.collection.immutable.HashMap
 
@@ -33,23 +30,18 @@ import scala.collection.immutable.HashMap
  *
  */
 
-class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) {
+class GetFile(token: String) extends BaseMethod(token) {
 
-    private val log = BotLogger.getLogger(classOf[GetUserProfilePhotos].getName)
+    private val log = BotLogger.getLogger(classOf[GetFile].getName)
 
-    override def path(): String = "getuserprofilephotos"
+    override def path(): String = "getfile"
 
     private val url = super.path + token + "/" + path
 
-    def request(user_id: Int, offset: Int, limit: Int): Option[UserProfilePhotos] = {
-
-        val pairs = buildValuePairs(HashMap("user_id" -> user_id.toString,
-                            "offset" -> offset.toString, "limit" -> limit.toString))
+    def request(file_id: Int): Option[File] = {
+        val pairs = buildValuePairs(HashMap("file_id" -> file_id.toString))
         val httpPost = generateHttpPost(url)
 
-        debug(httpPost, pairs)
-
-        handleAnswer[UserProfilePhotos](httpClient, httpPost)
+        handleAnswer[File](httpClient, httpPost)
     }
-
 }
