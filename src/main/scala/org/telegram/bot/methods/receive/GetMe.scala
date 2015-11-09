@@ -20,52 +20,33 @@ package org.telegram.bot.methods.receive
 
 import org.telegram.bot.methods.receive.getupdate.UpdateProducer
 import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.TelegramInformation
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.BotLogger
-import org.telegram.bot.api.formats
 import org.telegram.bot.api.User
 
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.client.ClientProtocolException
 
 import java.util.concurrent.TimeUnit
-
-import org.json4s.jackson.JsonMethods.parse
-import org.json4s.string2JsonInput
-import org.json4s.jvalue2monadic
-import org.json4s.JValue
 
 /**
  *
  */
 
-class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) with TelegramInformation {
+class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) {
 
     private val log = BotLogger.getLogger(classOf[GetMe].getName)
 
-    val path = "getme"
+    override def path(): String = "getme"
 
-    private val httpClient = HttpClientBuilder.create
-                                .setSSLHostnameVerifier(new NoopHostnameVerifier)
-                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
-
-    private val url = telegramPath + token + "/" + path
+    private val url = super.path + token + "/" + path
 
     def request(): Option[User] = {
         val httpPost = generateHttpPost(url)
 
         log.debug(httpPost.toString)
-
-        try {
-            val response = httpClient.execute(httpPost, new AnswerHandler)
-            val json = parse(response) \ "result"
-            json.extractOpt[User]
-        } catch {
-            case cp: ClientProtocolException => None
-        }
+        handleAnswer[User](httpClient, httpPost)
     }
 
     def checkToken(): Boolean = {

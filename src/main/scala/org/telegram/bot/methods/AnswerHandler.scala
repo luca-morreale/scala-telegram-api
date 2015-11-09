@@ -49,7 +49,7 @@ class AnswerHandler extends ResponseHandler[String] {
             val entity = response.getEntity();
             val buf = new BufferedHttpEntity(entity);
 
-            return if (entity != null) EntityUtils.toString(buf, "UTF-8") else null;
+            if (entity != null) EntityUtils.toString(buf, "UTF-8") else null
         } else {
             throw new ClientProtocolException("Unexpected response status: " + status);
         }

@@ -65,10 +65,11 @@ package object api {
      *
      */
     def extractAPI[API: Manifest](json: JValue, field: String): Option[API] = {
-        if (fieldExists(json, field))
+        if (fieldExists(json, field)) {
             Some((json \ field).extract[API])
-        else
+        } else {
             None
+        }
     }
 
     /**

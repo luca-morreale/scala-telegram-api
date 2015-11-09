@@ -18,7 +18,7 @@
 
 package org.telegram.bot.methods.receive
 
-import org.apache.http.client.ClientProtocolException
+
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 
@@ -44,17 +44,13 @@ import org.json4s.JValue
  *
  */
 
-class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) with TelegramInformation {
+class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) {
 
     private val log = BotLogger.getLogger(classOf[GetUserProfilePhotos].getName)
 
-    val path = "getuserprofilephotos"
+    override def path(): String = "getuserprofilephotos"
 
-    private val httpClient = HttpClientBuilder.create
-                                .setSSLHostnameVerifier(new NoopHostnameVerifier)
-                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
-
-    private val url = telegramPath + token + "/" + path
+    private val url = super.path + token + "/" + path
 
     def request(user_id: Int, offset: Int, limit: Int): Option[UserProfilePhotos] = {
 
@@ -64,13 +60,7 @@ class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token
 
         debug(httpPost, pairs)
 
-        try {
-            val response = httpClient.execute(httpPost, new AnswerHandler)
-            val json = parse(response) \ "result"
-            json.extractOpt[UserProfilePhotos]
-        } catch {
-            case cp: ClientProtocolException => None
-        }
+        handleAnswer[UserProfilePhotos](httpClient, httpPost)
     }
 
 }

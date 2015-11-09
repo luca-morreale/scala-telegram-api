@@ -18,22 +18,8 @@
 
 package org.telegram.bot.methods.send
 
-import org.apache.http.HttpEntity
-import org.apache.http.client.entity.UrlEncodedFormEntity
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.entity.BufferedHttpEntity
-import org.apache.http.entity.ContentType
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.impl.client.HttpClients
-import org.apache.http.util.EntityUtils
-import org.apache.http.NameValuePair
-
 import java.io.IOException
 
-import org.telegram.bot.TelegramInformation
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.Consumer
 import org.telegram.bot.util.BotLogger
@@ -44,15 +30,13 @@ import org.telegram.bot.methods.generateHttpPost
  *
  */
 
-class SendMessage(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] with TelegramInformation {
+class SendMessage(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] {
 
     private val log = BotLogger.getLogger(classOf[SendMessage].getName)
 
-    val path = "sendmessage"
+    override def path(): String = "sendmessage"
 
-    private val httpClient = HttpClientBuilder.create.setSSLHostnameVerifier(new NoopHostnameVerifier).build
-
-    private val url = telegramPath + token + "/" + path
+    private val url = super.path + token + "/" + path
 
     override def run():Unit = {
 

@@ -18,23 +18,50 @@
 
 package org.telegram.bot.methods
 
-import org.telegram.bot.util.BotLogger
-
+import org.apache.http.client.ClientProtocolException
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.NameValuePair
+
+import java.util.concurrent.TimeUnit
+
+import org.json4s.jackson.JsonMethods.parse
+
+import org.telegram.bot.api.formats
+import org.telegram.bot.util.BotLogger
 
 /**
  *
  */
 
-abstract class BaseMethod(token: String) {
+abstract class BaseMethod(token: String, timeout: Int=20) {
 
     private val log = BotLogger.getLogger(classOf[BaseMethod].getName)
+
+    protected val httpClient = HttpClientBuilder.create
+                                .setSSLHostnameVerifier(new NoopHostnameVerifier)
+                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
+
+    def path(): String = "https://api.telegram.org/bot"
 
     protected def token(): String = token
 
     protected def debug(http: HttpPost, nameValuePairs: List[NameValuePair]) = {
         log.debug(http.toString)
         log.debug(nameValuePairs.toString)
+    }
+
+    protected def handleAnswer[API: Manifest](httpClient: CloseableHttpClient, httpPost: HttpPost): Option[API] = {
+        try {
+            val response = httpClient.execute(httpPost, new AnswerHandler)
+            val json = parse(response) \ "result"
+            json.extractOpt[API]
+        } catch {
+            case cp: ClientProtocolException =>
+                log.debug(cp)
+                None
+        }
     }
 }

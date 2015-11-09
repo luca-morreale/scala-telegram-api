@@ -21,14 +21,12 @@ package org.telegram.bot.methods.receive.getupdate
 import java.util.concurrent.TimeUnit
 
 import org.apache.http.client.ClientProtocolException
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.NameValuePair
 
 import org.telegram.bot.api.Update
 import org.telegram.bot.util.BotLogger
-import org.telegram.bot.TelegramInformation
+import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.PriorityProducer
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.generateHttpPost
@@ -42,22 +40,21 @@ import org.json4s.jvalue2monadic
  *
  */
 
-class UpdateProducer(token: String, path: String, initialOffset: Int = 0, timeout: Int = 20)
-                                extends PriorityProducer[Update] with TelegramInformation {
+class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int = 20)
+                                extends BaseMethod(token, timeout) with PriorityProducer[Update] {
 
     private val log = BotLogger.getLogger(classOf[UpdateProducer].getName)
 
-    private val httpClient = HttpClientBuilder.create
-                                .setSSLHostnameVerifier(new NoopHostnameVerifier)
-                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
+    override def path(): String = "getupdates"
 
-    private val url = telegramPath + token + "/" + path
+    private val url = super.path + token + "/" + path
     private var offset = initialOffset
+    private val limit = 100
 
     def run(): Unit = {
         while(true) {
 
-            val pairs = generateUpdatePairs(offset, 100, timeout)
+            val pairs = generateUpdatePairs(offset, limit, timeout)
             val httpPost = generateHttpPost(url, pairs)
 
             debug(httpPost, pairs)
@@ -101,10 +98,5 @@ class UpdateProducer(token: String, path: String, initialOffset: Int = 0, timeou
         } catch {
             case ie: InterruptedException => log.error(ie)
         }
-    }
-
-    private def debug(http: HttpPost, nameValuePairs: List[NameValuePair]) = {
-        log.debug(http.toString)
-        log.debug(nameValuePairs.toString)
     }
 }

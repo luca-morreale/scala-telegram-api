@@ -28,11 +28,11 @@ import org.telegram.bot.methods.receive.getupdate.UpdateConsumer
  *
  */
 
-class GetUpdates(token: String, initialOffset: Int = 0, timeout: Int = 20) extends BaseMethod(token) with TelegramInformation {
+class GetUpdates(token: String, initialOffset: Int = 0, timeout: Int = 20) extends BaseMethod(token) {
 
-    val path = "getupdates"
+    override def path(): String = "getupdates"
 
-    private val producer = new UpdateProducer(token, path, initialOffset, timeout)
+    private val producer = new UpdateProducer(token, initialOffset, timeout)
     private val consumer = new UpdateConsumer
 
     val system = producer ==> consumer
