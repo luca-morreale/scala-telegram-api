@@ -41,10 +41,9 @@ class SendMessage(token: String) extends BaseMethod(token) with Consumer[Outgoin
     override def run():Unit = {
 
         while(true) {
+            val out = this.get
             try {
-                val out = this.get
-
-                val pairs = out.buildPairs
+                val pairs = out.buildPairsList
                 val httpPost = generateHttpPost(url, pairs)
                 debug(httpPost, pairs)
 
@@ -52,6 +51,7 @@ class SendMessage(token: String) extends BaseMethod(token) with Consumer[Outgoin
             } catch {
                 case ioe: IOException =>
                     log.error(ioe)
+                    accept(out)
                     throw new SendingException
             }
         }
