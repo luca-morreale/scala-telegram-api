@@ -18,40 +18,31 @@
 
 package org.telegram.bot.methods.send
 
-import org.apache.http.message.BasicNameValuePair
-import org.apache.http.NameValuePair
+import org.telegram.bot.api.ReplyKeyboard
 
 /**
  *
  */
 
-class OutgoingMessage(
-        chatId: Int,
-        text: String,
-        disableWebPagePreview: Boolean,
-        replayToMessageId: Int) {
-
-    def buildPairs(): List[NameValuePair] = {
-        List(
-            new BasicNameValuePair(OutgoingMessage.CHATID_FIELD, chatId.toString),
-            new BasicNameValuePair(OutgoingMessage.TEXT_FIELD, text),
-            new BasicNameValuePair(OutgoingMessage.DISABLEWEBPAGEPREVIEW_FIELD, disableWebPagePreview.toString),
-            new BasicNameValuePair(OutgoingMessage.REPLYTOMESSAGEID_FIELD, replayToMessageId.toString)
-        )
-    }
-}
+case class OutgoingMessage(
+                chat_id: Int,
+                text: String,
+                disable_web_page_preview: Boolean,
+                reply_to_message_id: Int,
+                reply_markup: ReplyKeyboard
+                ) extends OutgoingData
 
 object OutgoingMessage {
 
-    val CHATID_FIELD = "chat_id"
+    val chatIdField = "chat_id"
 
-    val TEXT_FIELD = "text"
+    val textField = "text"
 
-    val DISABLEWEBPAGEPREVIEW_FIELD = "disable_web_page_preview"
+    val disableWebpagePreviewField = "disable_web_page_preview"
 
-    val REPLYTOMESSAGEID_FIELD = "reply_to_message_id"
+    val replyToMessageIdField = "reply_to_message_id"
 
-    val REPLYMARKUP_FIELD = "reply_markup"
+    val replyMarkupField = "reply_markup"
 
 }
 
