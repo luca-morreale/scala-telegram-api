@@ -18,9 +18,43 @@
 
 package org.telegram.bot.methods.send
 
-/**
- * @author luca
- */
-class SendSticker {
+import org.telegram.bot.util.Consumer
+import org.telegram.bot.util.BotLogger
+import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.methods.AnswerHandler
+import org.telegram.bot.methods.generateHttpPost
 
+import java.io.IOException
+
+
+/**
+ *
+ */
+
+class SendSticker(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] {
+
+    private val log = BotLogger.getLogger(classOf[SendSticker].getName)
+
+    override def path(): String = "sendsticker"
+
+    private val url = super.path + token + "/" + path
+
+    override def run():Unit = {
+
+        while(true) {
+            val out = this.get
+            try {
+                val pairs = out.buildPairsList
+                val httpPost = generateHttpPost(url, pairs)
+                debug(httpPost, pairs)
+
+                httpClient.execute(httpPost, new AnswerHandler)
+            } catch {
+                case ioe: IOException =>
+                    log.error(ioe)
+                    accept(out)
+                    throw new SendingException
+            }
+        }
+    }
 }
