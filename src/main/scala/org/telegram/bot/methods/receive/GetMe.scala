@@ -20,7 +20,6 @@ package org.telegram.bot.methods.receive
 
 import org.telegram.bot.methods.receive.getupdate.UpdateProducer
 import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.TelegramInformation
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.api.User
@@ -52,7 +51,7 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token)
     def checkToken(): Boolean = {
         val userOpt = request
         if(userOpt == None) {
-            false
+            throw new Exception("impossible to check")
         }else {
             userOpt.get.id.toString == token.split(":")(0) &&
                 userOpt.get.first_name == name

@@ -18,13 +18,21 @@
 
 package org.telegram.bot.methods.receive
 
-import org.telegram.bot.methods.buildValuePairs
-import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.methods.BaseMethod
-import org.telegram.bot.util.BotLogger
-import org.telegram.bot.api.File
+import java.io.{ File => JFile, FileOutputStream }
+import java.net.URL
 
 import scala.collection.immutable.HashMap
+import scala.sys.process.urlToProcess
+import scala.io.BufferedSource
+import scala.io.Source
+
+import org.telegram.bot.api.File
+import org.telegram.bot.util.BotLogger
+import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.methods.buildValuePairs
+import org.telegram.bot.methods.generateHttpPost
+
+import spray.can.Http
 
 /**
  *
@@ -43,5 +51,28 @@ class GetFile(token: String) extends BaseMethod(token) {
         val httpPost = generateHttpPost(url)
 
         handleAnswer[File](httpClient, httpPost)
+    }
+
+    def get(file_id: Int, fileName: String): JFile = {
+        val apiFile = request(file_id)
+
+        if(apiFile.isDefined) {
+            (new URL(apiFile.get.getFullPath(token)) #> new JFile(fileName)).!!
+            new JFile(fileName)
+        } else {
+            throw new Exception("impossible to downlod the file")
+        }
+
+    }
+
+    def getBufferedSource(file_id: Int, fileName: String): BufferedSource = {
+        val apiFile = request(file_id)
+
+        if(apiFile.isDefined) {
+            val url = new URL(apiFile.get.getFullPath(token))
+            Source.fromURL(url)
+        } else {
+            throw new Exception("impossible to downlod the file")
+        }
     }
 }

@@ -25,7 +25,12 @@ package org.telegram.bot.api
 case class File(
         val file_id: String,
         val file_size: Option[Int],
-        val file_path: Option[String]) extends Ordered[File] with APIClass {    // Use https://api.telegram.org/file/bot<token>/<file_path>
+        val file_path: Option[String]) extends Ordered[File] with APIClass {
+
+    def getFullPath(token: String): String = {
+         if(file_path == None) throw new Exception("")
+        "https://api.telegram.org/file/bot" + token + "/" + file_path.get
+    }
 
     def compare(that: File):Int = file_id compareTo that.file_id
 

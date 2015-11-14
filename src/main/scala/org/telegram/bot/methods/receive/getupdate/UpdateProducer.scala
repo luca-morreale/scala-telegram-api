@@ -40,7 +40,7 @@ import org.json4s.jvalue2monadic
  *
  */
 
-class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int = 20)
+class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
                                 extends BaseMethod(token, timeout) with PriorityProducer[Update] {
 
     private val log = BotLogger.getLogger(classOf[UpdateProducer].getName)

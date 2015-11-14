@@ -36,7 +36,7 @@ import org.telegram.bot.util.BotLogger
  *
  */
 
-abstract class BaseMethod(token: String, timeout: Int=20) {
+abstract class BaseMethod(token: String, timeout: Int=BaseMethod.defaultTimeout) {
 
     private val log = BotLogger.getLogger(classOf[BaseMethod].getName)
 
@@ -64,4 +64,10 @@ abstract class BaseMethod(token: String, timeout: Int=20) {
                 None
         }
     }
+}
+
+
+private object BaseMethod {
+
+    val defaultTimeout = 20
 }

@@ -19,7 +19,6 @@
 package org.telegram.bot.methods.receive
 
 import org.telegram.bot.api.Update
-import org.telegram.bot.TelegramInformation
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.receive.getupdate.UpdateProducer
 import org.telegram.bot.methods.receive.getupdate.UpdateConsumer
@@ -28,7 +27,8 @@ import org.telegram.bot.methods.receive.getupdate.UpdateConsumer
  *
  */
 
-class GetUpdates(token: String, initialOffset: Int = 0, timeout: Int = 20) extends BaseMethod(token) {
+class GetUpdates(token: String, initialOffset: Int = 0, timeout: Int=BaseMethod.defaultTimeout)
+                                                    extends BaseMethod(token, timeout) {
 
     override def path(): String = "getupdates"
 
