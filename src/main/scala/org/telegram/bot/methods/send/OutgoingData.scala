@@ -18,6 +18,7 @@
 
 package org.telegram.bot.methods.send
 
+import org.telegram.bot.api.ReplyKeyboard
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.NameValuePair
 
@@ -25,19 +26,31 @@ import org.apache.http.NameValuePair
  *
  */
 
-abstract class OutgoingData {
+trait OutgoingData {
 
-    def buildPairsList(): List[NameValuePair] = buildPairsIterable().toList
+    def chatId(): Int
 
-    private def buildPairsIterable(): Iterable[NameValuePair] = {
+    def replyMessageId(): Int
 
-        val fields = this.getClass.getDeclaredFields.foldLeft(Map[String, Any]()){(a, f) => a + (f.getName -> f.get(this))}
+    def replayMarkup(): ReplyKeyboard
 
-        for {(field, value) <- fields} yield {new BasicNameValuePair(field, value.toString)}
-
+    def buildPairsList(): List[NameValuePair] = {
+        buildPair(OutgoingDataField.chatId, chatId.toString) ::
+        buildPair(OutgoingDataField.replyToMessageId, replyMessageId.toString) ::
+        buildPair(OutgoingDataField.replyMarkup, replayMarkup.toString) ::
+        Nil
     }
 
-    // alternative (Map[String, Any]() /: this.getClass.getDeclaredFields) { (a, f) => a + (f.getName -> f.get(this)) }
-    protected def getFieldMap() = this.getClass.getDeclaredFields.foldLeft(Map[String, Any]()){(a, f) => a + (f.getName -> f.get(this))}
+    protected def buildPair(field: String, content: String): NameValuePair = new BasicNameValuePair(field, content)
+
+}
+
+object OutgoingDataField {
+
+    val chatId = "chat_id"
+
+    val replyToMessageId = "reply_to_message_id"
+
+    val replyMarkup = "reply_markup"
 
 }

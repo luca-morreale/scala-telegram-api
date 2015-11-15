@@ -28,23 +28,27 @@ import org.apache.http.NameValuePair
  *
  */
 
-case class OutgoingSticker(chatId: Int,
-                            sticker: String,
-                            replayToMessageId: Int,
-                            replayMarkup: ReplyKeyboard
-                            ) extends OutgoingData {
+class OutgoingSticker(chatId: Int,
+                        sticker: String,
+                        replayToMessageId: Int,
+                        replayMarkup: ReplyKeyboard
+                        ) extends OutgoingData {
 
     private val stickerName: String = ""
 
+    override def chatId(): Int = chatId
+
+    override def replyMessageId(): Int = replayToMessageId
+
+    override def replayMarkup(): ReplyKeyboard = replayMarkup
+
+    override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingStickerField.sticker, sticker) :: super.buildPairsList
+
+
 }
 
-object OutgoingSticker {
-
-    val chatId = "chat_id"
+object OutgoingStickerField {
 
     val sticker = "sticker"
 
-    val replyToMessage_id = "reply_to_message_id"
-
-    val replyMarkup = "reply_markup";
 }

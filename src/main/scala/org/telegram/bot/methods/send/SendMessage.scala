@@ -20,37 +20,32 @@ package org.telegram.bot.methods.send
 
 import java.io.IOException
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.Consumer
 import org.telegram.bot.util.BotLogger
+import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.AnswerHandler
+import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
+
+import org.apache.http.impl.client.CloseableHttpClient
 
 /**
  *
  */
 
-class SendMessage(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] {
+class SendMessage(token: String) extends BaseMethod(token) with DataSender with Consumer[OutgoingMessage] {
 
-    private val log = BotLogger.getLogger(classOf[SendMessage].getName)
-
-    override def path(): String = "sendmessage"
-
-    private val url = super.path + token + "/" + path
+    override def url(): String = super.url + token + "/" + "sendmessage"
 
     override def run():Unit = {
-
+        val out = this.get
         while(true) {
-            val out = this.get
-            try {
-                val pairs = out.buildPairsList
-                val httpPost = generateHttpPost(url, pairs)
-                debug(httpPost, pairs)
 
-                httpClient.execute(httpPost, new AnswerHandler)
+            try {
+                send(out)
             } catch {
                 case ioe: IOException =>
-                    log.error(ioe)
+                    logger.error(ioe)
                     accept(out)
                     throw new SendingException
             }

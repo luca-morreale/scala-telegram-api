@@ -31,27 +31,19 @@ import java.io.IOException
  *
  */
 
-class SendSticker(token: String) extends BaseMethod(token) with Consumer[OutgoingMessage] {
+class SendSticker(token: String) extends BaseMethod(token) with DataSender with Consumer[OutgoingMessage] {
 
-    private val log = BotLogger.getLogger(classOf[SendSticker].getName)
-
-    override def path(): String = "sendsticker"
-
-    private val url = super.path + token + "/" + path
+    override def url(): String = super.url + token + "/" + "sendsticker"
 
     override def run():Unit = {
-
+        val out = this.get
         while(true) {
-            val out = this.get
-            try {
-                val pairs = out.buildPairsList
-                val httpPost = generateHttpPost(url, pairs)
-                debug(httpPost, pairs)
 
-                httpClient.execute(httpPost, new AnswerHandler)
+            try {
+                send(out)
             } catch {
                 case ioe: IOException =>
-                    log.error(ioe)
+                    logger.error(ioe)
                     accept(out)
                     throw new SendingException
             }

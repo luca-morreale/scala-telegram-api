@@ -20,29 +20,38 @@ package org.telegram.bot.methods.send
 
 import org.telegram.bot.api.ReplyKeyboard
 
+import org.apache.http.message.BasicNameValuePair
+import org.apache.http.NameValuePair
+
 /**
  *
  */
 
-case class OutgoingMessage(
-                chat_id: Int,
-                text: String,
-                disable_web_page_preview: Boolean,
-                reply_to_message_id: Int,
-                reply_markup: ReplyKeyboard
-                ) extends OutgoingData
+class OutgoingMessage(chatId: Int,
+                        text: String,
+                        disableWebPagePreview: Boolean,
+                        replayToMessageId: Int,
+                        replayMarkup: ReplyKeyboard
+                        ) extends OutgoingData {
 
-object OutgoingMessage {
+    override def chatId(): Int = chatId
 
-    val chatIdField = "chat_id"
+    override def replyMessageId(): Int = replayToMessageId
 
-    val textField = "text"
+    override def replayMarkup(): ReplyKeyboard = replayMarkup
 
-    val disableWebpagePreviewField = "disable_web_page_preview"
+    override def buildPairsList(): List[NameValuePair] = {
+        buildPair(OutgoingMessageField.text, text) ::
+            buildPair(OutgoingMessageField.disableWebpagePreview, disableWebPagePreview.toString) ::
+            super.buildPairsList
+    }
+}
 
-    val replyToMessageIdField = "reply_to_message_id"
+object OutgoingMessageField {
 
-    val replyMarkupField = "reply_markup"
+    val text = "text"
+
+    val disableWebpagePreview = "disable_web_page_preview"
 
 }
 
