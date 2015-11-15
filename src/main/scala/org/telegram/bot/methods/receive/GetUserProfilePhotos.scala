@@ -18,10 +18,10 @@
 
 package org.telegram.bot.methods.receive
 
-
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.api.UserProfilePhotos
+import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
 import org.telegram.bot.methods.generateHttpPost
 
@@ -33,13 +33,9 @@ import scala.collection.immutable.HashMap
  *
  */
 
-class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) {
+class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) with MethodDebugger {
 
-    private val log = BotLogger.getLogger(classOf[GetUserProfilePhotos].getName)
-
-    override def path(): String = "getuserprofilephotos"
-
-    private val url = super.path + token + "/" + path
+    override def url(): String = super.url + token + "/" + "getuserprofilephotos"
 
     def request(user_id: Int, offset: Int, limit: Int): Option[UserProfilePhotos] = {
 

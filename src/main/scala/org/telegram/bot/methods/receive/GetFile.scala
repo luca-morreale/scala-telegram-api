@@ -29,6 +29,7 @@ import scala.io.Source
 import org.telegram.bot.api.File
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
 import org.telegram.bot.methods.generateHttpPost
 
@@ -38,13 +39,9 @@ import spray.can.Http
  *
  */
 
-class GetFile(token: String) extends BaseMethod(token) {
+class GetFile(token: String) extends BaseMethod(token) with MethodDebugger {
 
-    private val log = BotLogger.getLogger(classOf[GetFile].getName)
-
-    override def path(): String = "getfile"
-
-    private val url = super.path + token + "/" + path
+    override def url(): String = super.url + token + "/" + "getfile"
 
     def request(file_id: Int): Option[File] = {
         val pairs = buildValuePairs(HashMap("file_id" -> file_id.toString))

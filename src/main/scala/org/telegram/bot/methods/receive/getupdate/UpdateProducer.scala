@@ -29,6 +29,7 @@ import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.PriorityProducer
 import org.telegram.bot.methods.AnswerHandler
+import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
 
 import org.json4s.jackson.JsonMethods.parse
@@ -41,14 +42,12 @@ import org.json4s.jvalue2monadic
  */
 
 class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
-                                extends BaseMethod(token, timeout) with PriorityProducer[Update] {
+                                extends BaseMethod(token, timeout) with MethodDebugger with PriorityProducer[Update] {
 
-    private val log = BotLogger.getLogger(classOf[UpdateProducer].getName)
+    override def url(): String = super.url + token + "/" + "getupdates"
 
-    override def path(): String = "getupdates"
-
-    private val url = super.path + token + "/" + path
     private var offset = initialOffset
+
     private val limit = 100
 
     def run(): Unit = {
@@ -96,7 +95,7 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
                 this wait 500
             }
         } catch {
-            case ie: InterruptedException => log.error(ie)
+            case ie: InterruptedException => logger.error(ie)
         }
     }
 }

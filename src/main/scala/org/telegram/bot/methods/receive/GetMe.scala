@@ -20,6 +20,7 @@ package org.telegram.bot.methods.receive
 
 import org.telegram.bot.methods.receive.getupdate.UpdateProducer
 import org.telegram.bot.methods.generateHttpPost
+import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.api.User
@@ -33,18 +34,14 @@ import java.util.concurrent.TimeUnit
  *
  */
 
-class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) {
+class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) with MethodDebugger {
 
-    private val log = BotLogger.getLogger(classOf[GetMe].getName)
-
-    override def path(): String = "getme"
-
-    private val url = super.path + token + "/" + path
+    override def url(): String = super.url + token + "/" + "getme"
 
     def request(): Option[User] = {
         val httpPost = generateHttpPost(url)
 
-        log.debug(httpPost.toString)
+        debug(httpPost, List())
         handleAnswer[User](httpClient, httpPost)
     }
 
