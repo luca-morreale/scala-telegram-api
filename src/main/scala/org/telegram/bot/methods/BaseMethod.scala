@@ -36,22 +36,20 @@ import org.telegram.bot.util.BotLogger
  *
  */
 
-abstract class BaseMethod(token: String, timeout: Int=BaseMethod.defaultTimeout) {
+abstract class BaseMethod(token: String, timeout: Int=BaseMethod.defaultTimeout) extends Method {
 
     private val log = BotLogger.getLogger(classOf[BaseMethod].getName)
 
-    protected val httpClient = HttpClientBuilder.create
-                                .setSSLHostnameVerifier(new NoopHostnameVerifier)
-                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
+    private val closeableHTTPClient = HttpClientBuilder.create.setSSLHostnameVerifier(new NoopHostnameVerifier)
+                                                                .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
 
-    def path(): String = "https://api.telegram.org/bot"
+    def url(): String = "https://api.telegram.org/bot"
 
-    protected def token(): String = token
+    def token(): String = token
 
-    protected def debug(http: HttpPost, nameValuePairs: List[NameValuePair]) = {
-        log.debug(http.toString)
-        log.debug(nameValuePairs.toString)
-    }
+    protected def logger(): BotLogger = log
+
+    protected def httpClient(): CloseableHttpClient = closeableHTTPClient
 
     protected def handleAnswer[API: Manifest](httpClient: CloseableHttpClient, httpPost: HttpPost): Option[API] = {
         try {
