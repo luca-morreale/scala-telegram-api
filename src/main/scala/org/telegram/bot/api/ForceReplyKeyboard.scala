@@ -59,6 +59,7 @@ class ForceReplyKeyboard(json: JValue) extends ReplyKeyboard {
         (ForceReplyKeyboard.FORCEREPLY_FIELD -> forceReply) ~
                 (ForceReplyKeyboard.SELECTIVE_FIELD -> selective)
     }
+
 }
 
 protected object ForceReplyKeyboard {

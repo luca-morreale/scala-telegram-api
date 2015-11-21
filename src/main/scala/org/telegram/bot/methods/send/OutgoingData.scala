@@ -19,8 +19,12 @@
 package org.telegram.bot.methods.send
 
 import org.telegram.bot.api.ReplyKeyboard
+
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.NameValuePair
+import org.apache.http.entity.ContentType
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.{StringBody, FileBody}
 
 /**
  *
@@ -33,19 +37,29 @@ abstract class OutgoingData(chatId: Int,
 
     def buildPairsList(): List[NameValuePair] = buildPair(OutgoingDataField.chatId, chatId.toString) :: buildOptList
 
-    private def buildOptList(): List[NameValuePair] = optReplayMessageIdList() ::: optReplayMarkupList()
+    def buildMultipart(): MultipartEntityBuilder = buildOptPart addPart(OutgoingDataField.chatId, new StringBody(chatId.toString, ContentType.TEXT_PLAIN))
 
-    private def optReplayMessageIdList(): List[NameValuePair] = {
-        if(replayToMessageId.isDefined) {
-            buildPair(OutgoingDataField.replayToMessageId, replayToMessageId.get.toString) :: Nil
-        } else {
-            Nil
-        }
+    private def buildOptPart(): MultipartEntityBuilder = {
+        optPart(OutgoingDataField.replayMarkup, replayMarkup,
+            optPart(OutgoingDataField.replayToMessageId, replayToMessageId, MultipartEntityBuilder.create)
+        )
     }
 
-    private def optReplayMarkupList(): List[NameValuePair] = {
-        if(replayMarkup.isDefined) {
-            buildPair(OutgoingDataField.replayMarkup, replayMarkup.toString) :: Nil
+    protected def optPart(field: String, value: Option[Any], builder: MultipartEntityBuilder): MultipartEntityBuilder = {
+        if(value.isDefined) {
+            builder.addPart(field, new StringBody(value.get.toString, ContentType.TEXT_PLAIN))
+        }
+        builder
+    }
+
+    private def buildOptList(): List[NameValuePair] = {
+        optPair(OutgoingDataField.replayToMessageId, replayToMessageId) :::
+            optPair(OutgoingDataField.replayMarkup, replayMarkup)
+    }
+
+    protected def optPair(field: String, value: Option[Any]): List[NameValuePair] = {
+        if(value.isDefined) {
+            buildPair(field, value.get.toString) :: Nil
         } else {
             Nil
         }

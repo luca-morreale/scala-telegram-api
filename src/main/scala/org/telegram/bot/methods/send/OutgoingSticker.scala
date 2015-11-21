@@ -36,7 +36,6 @@ class OutgoingSticker(chatId: Int,
 
     override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingStickerField.sticker, sticker) :: super.buildPairsList
 
-
 }
 
 object OutgoingStickerField {

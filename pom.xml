@@ -18,6 +18,11 @@
          <version>4.5</version>
      </dependency>
      <dependency>
+       <groupId>org.apache.httpcomponents</groupId>
+       <artifactId>httpmime</artifactId>
+       <version>4.5</version>
+     </dependency>
+     <dependency>
        <groupId>org.json4s</groupId>
        <artifactId>json4s-native_2.10</artifactId>
        <version>3.2.11</version>

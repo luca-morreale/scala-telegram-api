@@ -23,5 +23,7 @@ import org.json4s.JValue
 
 trait ReplyKeyboard extends APIClass {
 
-    def toJson(): JValue;
+    def toJson(): JValue
+
+    override def toString(): String = toJson().toString
 }
