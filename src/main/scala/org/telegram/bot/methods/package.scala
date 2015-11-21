@@ -19,11 +19,11 @@
 package org.telegram.bot
 
 import org.apache.http.NameValuePair
-import org.apache.http.client.entity.UrlEncodedFormEntity
+
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.message.BasicNameValuePair
+import org.apache.http.HttpEntity
 
-import scala.collection.JavaConverters.seqAsJavaListConverter
 import scala.collection.immutable.HashMap
 
 /**
@@ -35,11 +35,11 @@ package object methods {
     /**
      * Generates an HttPost class with base header and the given parameters.
      * @params url              url of the server
-     * @params nameValuePairs   post parameters
+     * @params entity           post parameters
      */
-    def generateHttpPost(url: String, nameValuePairs: List[NameValuePair]):HttpPost = {
+    def generateHttpPost(url: String, entity: HttpEntity):HttpPost = {
         val http = generateHttpPost(url)
-        http.setEntity(new UrlEncodedFormEntity(nameValuePairs.asJava, "UTF-8"))
+        http.setEntity(entity)
         http
     }
 

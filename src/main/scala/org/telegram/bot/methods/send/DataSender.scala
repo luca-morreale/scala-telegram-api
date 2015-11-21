@@ -21,10 +21,14 @@ package org.telegram.bot.methods.send
 import org.apache.http.NameValuePair
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.client.entity.UrlEncodedFormEntity
+import org.apache.http.HttpEntity
 
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
+
+import scala.collection.JavaConverters.seqAsJavaListConverter
 
 /**
  *
@@ -36,14 +40,27 @@ trait DataSender extends MethodDebugger{
 
     protected def httpClient(): CloseableHttpClient
 
-    protected def debug(http: HttpPost, nameValuePairs: List[NameValuePair]): Unit
+    protected def debug(http: HttpPost, entity: HttpEntity): Unit
 
     protected def send(out: OutgoingData): Unit = {
 
         val pairs = out.buildPairsList
-        val httpPost = generateHttpPost(url, pairs)
-        debug(httpPost, pairs)
+        val entity = new UrlEncodedFormEntity(pairs.asJava, "UTF-8")
+        sendData(entity)
+    }
+
+    protected def sendMultipart(out: OutgoingData): Unit = {
+
+        val multipart = out.buildMultipart.build
+        sendData(multipart)
+    }
+
+    private def sendData(entity: HttpEntity) = {
+
+        val httpPost = generateHttpPost(url, entity)
+        debug(httpPost, entity)
 
         httpClient.execute(httpPost, new AnswerHandler)
     }
+
 }

@@ -31,7 +31,7 @@ import java.io.IOException
  *
  */
 
-class SendSticker(token: String) extends BaseMethod(token) with DataSender with Consumer[OutgoingMessage] {
+class SendSticker(token: String) extends BaseMethod(token) with DataSender with Consumer[OutgoingSticker] {
 
     override def url(): String = super.url + token + "/" + "sendsticker"
 

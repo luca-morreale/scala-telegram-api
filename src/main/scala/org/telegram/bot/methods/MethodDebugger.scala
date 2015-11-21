@@ -19,7 +19,7 @@
 package org.telegram.bot.methods
 
 import org.apache.http.client.methods.HttpPost
-import org.apache.http.NameValuePair
+import org.apache.http.HttpEntity
 
 import org.telegram.bot.util.BotLogger
 
@@ -31,8 +31,8 @@ trait MethodDebugger {
 
     protected def logger(): BotLogger
 
-    protected def debug(http: HttpPost, nameValuePairs: List[NameValuePair]) = {
+    protected def debug(http: HttpPost, entity: HttpEntity) = {
         logger.debug(http.toString)
-        logger.debug(nameValuePairs.toString)
+        logger.debug(entity.toString)
     }
 }
