@@ -26,19 +26,29 @@ import org.apache.http.NameValuePair
  *
  */
 
-trait OutgoingData {
+abstract class OutgoingData(chatId: Int,
+                            replayToMessageId: Option[Int]=None,
+                            replayMarkup: Option[ReplyKeyboard]=None
+                            ) {
 
-    def chatId(): Int
+    def buildPairsList(): List[NameValuePair] = buildPair(OutgoingDataField.chatId, chatId.toString) :: buildOptList
 
-    def replyMessageId(): Int
+    private def buildOptList(): List[NameValuePair] = optReplayMessageIdList() ::: optReplayMarkupList()
 
-    def replayMarkup(): ReplyKeyboard
+    private def optReplayMessageIdList(): List[NameValuePair] = {
+        if(replayToMessageId.isDefined) {
+            buildPair(OutgoingDataField.replayToMessageId, replayToMessageId.get.toString) :: Nil
+        } else {
+            Nil
+        }
+    }
 
-    def buildPairsList(): List[NameValuePair] = {
-        buildPair(OutgoingDataField.chatId, chatId.toString) ::
-        buildPair(OutgoingDataField.replyToMessageId, replyMessageId.toString) ::
-        buildPair(OutgoingDataField.replyMarkup, replayMarkup.toString) ::
-        Nil
+    private def optReplayMarkupList(): List[NameValuePair] = {
+        if(replayMarkup.isDefined) {
+            buildPair(OutgoingDataField.replayMarkup, replayMarkup.toString) :: Nil
+        } else {
+            Nil
+        }
     }
 
     protected def buildPair(field: String, content: String): NameValuePair = new BasicNameValuePair(field, content)
@@ -49,8 +59,8 @@ object OutgoingDataField {
 
     val chatId = "chat_id"
 
-    val replyToMessageId = "reply_to_message_id"
+    val replayToMessageId = "reply_to_message_id"
 
-    val replyMarkup = "reply_markup"
+    val replayMarkup = "reply_markup"
 
 }

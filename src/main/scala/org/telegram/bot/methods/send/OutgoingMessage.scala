@@ -30,15 +30,9 @@ import org.apache.http.NameValuePair
 class OutgoingMessage(chatId: Int,
                         text: String,
                         disableWebPagePreview: Boolean,
-                        replayToMessageId: Int,
-                        replayMarkup: ReplyKeyboard
-                        ) extends OutgoingData {
-
-    override def chatId(): Int = chatId
-
-    override def replyMessageId(): Int = replayToMessageId
-
-    override def replayMarkup(): ReplyKeyboard = replayMarkup
+                        replayToMessageId: Option[Int]=None,
+                        replayMarkup: Option[ReplyKeyboard]=None
+                        ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
     override def buildPairsList(): List[NameValuePair] = {
         buildPair(OutgoingMessageField.text, text) ::

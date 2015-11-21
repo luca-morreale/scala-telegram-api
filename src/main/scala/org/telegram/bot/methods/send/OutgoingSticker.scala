@@ -30,17 +30,9 @@ import org.apache.http.NameValuePair
 
 class OutgoingSticker(chatId: Int,
                         sticker: String,
-                        replayToMessageId: Int,
-                        replayMarkup: ReplyKeyboard
-                        ) extends OutgoingData {
-
-    private val stickerName: String = ""
-
-    override def chatId(): Int = chatId
-
-    override def replyMessageId(): Int = replayToMessageId
-
-    override def replayMarkup(): ReplyKeyboard = replayMarkup
+                        replayToMessageId: Option[Int],
+                        replayMarkup: Option[ReplyKeyboard]
+                        ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
     override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingStickerField.sticker, sticker) :: super.buildPairsList
 
