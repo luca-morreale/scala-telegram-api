@@ -20,9 +20,10 @@ package org.telegram.bot.methods.send
 
 import org.telegram.bot.api.ReplyKeyboard
 
-import org.apache.http.message.BasicNameValuePair
 import org.apache.http.NameValuePair
-
+import org.apache.http.entity.ContentType
+import org.apache.http.entity.mime.content.StringBody
+import org.apache.http.entity.mime.MultipartEntityBuilder
 
 /**
  *
@@ -35,6 +36,8 @@ class OutgoingSticker(chatId: Int,
                         ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
     override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingStickerField.sticker, sticker) :: super.buildPairsList
+
+    override def buildMultipart(): MultipartEntityBuilder = super.buildMultipart.addPart(OutgoingStickerField.sticker, new StringBody(sticker, ContentType.TEXT_PLAIN))
 
 }
 

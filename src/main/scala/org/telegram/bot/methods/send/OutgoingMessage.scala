@@ -20,8 +20,10 @@ package org.telegram.bot.methods.send
 
 import org.telegram.bot.api.ReplyKeyboard
 
-import org.apache.http.message.BasicNameValuePair
 import org.apache.http.NameValuePair
+import org.apache.http.entity.ContentType
+import org.apache.http.entity.mime.content.StringBody
+import org.apache.http.entity.mime.MultipartEntityBuilder
 
 /**
  *
@@ -38,6 +40,11 @@ class OutgoingMessage(chatId: Int,
         buildPair(OutgoingMessageField.text, text) ::
             buildPair(OutgoingMessageField.disableWebpagePreview, disableWebPagePreview.toString) ::
             super.buildPairsList
+    }
+
+    override def buildMultipart(): MultipartEntityBuilder = {
+        super.buildMultipart.addPart(OutgoingMessageField.text, new StringBody(text, ContentType.TEXT_PLAIN))
+            .addPart(OutgoingMessageField.disableWebpagePreview, new StringBody(disableWebPagePreview.toString, ContentType.TEXT_PLAIN))
     }
 }
 

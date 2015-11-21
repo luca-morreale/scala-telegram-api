@@ -41,7 +41,8 @@ abstract class OutgoingData(chatId: Int,
 
     private def buildOptPart(): MultipartEntityBuilder = {
         optPart(OutgoingDataField.replayMarkup, replayMarkup,
-            optPart(OutgoingDataField.replayToMessageId, replayToMessageId, MultipartEntityBuilder.create)
+            optPart(OutgoingDataField.replayToMessageId, replayToMessageId,
+                MultipartEntityBuilder.create)
         )
     }
 
