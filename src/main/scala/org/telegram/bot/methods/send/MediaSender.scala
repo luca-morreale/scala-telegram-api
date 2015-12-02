@@ -18,13 +18,26 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
+import java.io.IOException
 
 /**
  *
  */
 
-class SendSticker(token: String) extends BaseMethod(token) with DataSender[OutgoingSticker] {
+trait MediaSender[T <: OutgoingData] extends DataSender[T] {
 
-    override def url(): String = super.url + token + "/" + "sendsticker"
+    override def run():Unit = {
+        val out = this.get
+        while(true) {
+
+            try {
+                sendMultipart(out)
+            } catch {
+                case ioe: IOException =>
+                    logger.error(ioe)
+                    accept(out)
+                    throw new SendingException
+            }
+        }
+    }
 }

@@ -18,34 +18,14 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.util.Consumer
-import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.BaseMethod
-import org.telegram.bot.methods.AnswerHandler
-import org.telegram.bot.methods.generateHttpPost
-
-import java.io.IOException
 
 /**
  *
  */
 
-class SendAudio(token: String) extends BaseMethod(token) with DataSender with Consumer[OutgoingAudio] {
+class SendAudio(token: String) extends BaseMethod(token) with MediaSender[OutgoingAudio] {
 
     override def url(): String = super.url + token + "/" + "sendaudio"
 
-    override def run():Unit = {
-        val out = this.get
-        while(true) {
-
-            try {
-                sendMultipart(out)
-            } catch {
-                case ioe: IOException =>
-                    logger.error(ioe)
-                    accept(out)
-                    throw new SendingException
-            }
-        }
-    }
 }

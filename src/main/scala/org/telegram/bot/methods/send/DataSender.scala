@@ -27,14 +27,32 @@ import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
+import org.telegram.bot.util.Consumer
+
+import java.io.IOException
 
 /**
  *
  */
 
-trait DataSender extends MethodDebugger{
+trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
 
     def url(): String
+
+    override def run():Unit = {
+        val out = this.get
+        while(true) {
+
+            try {
+                send(out)
+            } catch {
+                case ioe: IOException =>
+                    logger.error(ioe)
+                    accept(out)
+                    throw new SendingException
+            }
+        }
+    }
 
     protected def httpClient(): CloseableHttpClient
 
