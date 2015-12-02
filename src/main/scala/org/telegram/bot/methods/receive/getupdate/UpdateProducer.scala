@@ -31,6 +31,7 @@ import org.telegram.bot.util.PriorityProducer
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
+import org.telegram.bot.methods.pairsToEntity
 
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.string2JsonInput
@@ -54,9 +55,10 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
         while(true) {
 
             val pairs = generateUpdatePairs(offset, limit, timeout)
-            val httpPost = generateHttpPost(url, pairs)
+            val entity = pairsToEntity(pairs)
+            val httpPost = generateHttpPost(url, entity)
 
-            debug(httpPost, pairs)
+            debug(httpPost, entity)
 
             try {
                 val updateList = fetchUpdates(httpPost)

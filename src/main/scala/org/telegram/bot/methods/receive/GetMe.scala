@@ -41,7 +41,7 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token)
     def request(): Option[User] = {
         val httpPost = generateHttpPost(url)
 
-        debug(httpPost, List())
+        debug(httpPost)
         handleAnswer[User](httpClient, httpPost)
     }
 

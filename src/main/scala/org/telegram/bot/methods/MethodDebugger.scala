@@ -31,8 +31,12 @@ trait MethodDebugger {
 
     protected def logger(): BotLogger
 
-    protected def debug(http: HttpPost, entity: HttpEntity) = {
-        logger.debug(http.toString)
-        logger.debug(entity.toString)
+    protected def debug(http: HttpPost, entity: HttpEntity):Unit = {
+        debug(http)
+        logger debug entity.toString
+    }
+
+    protected def debug(http: HttpPost):Unit = {
+        logger debug http.toString
     }
 }

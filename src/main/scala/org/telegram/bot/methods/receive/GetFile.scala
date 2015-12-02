@@ -31,6 +31,7 @@ import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
+import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.methods.generateHttpPost
 
 import spray.can.Http
@@ -45,7 +46,10 @@ class GetFile(token: String) extends BaseMethod(token) with MethodDebugger {
 
     def request(file_id: Int): Option[File] = {
         val pairs = buildValuePairs(HashMap("file_id" -> file_id.toString))
-        val httpPost = generateHttpPost(url)
+        val entity = pairsToEntity(pairs)
+        val httpPost = generateHttpPost(url, entity)
+
+        debug(httpPost, entity)
 
         handleAnswer[File](httpClient, httpPost)
     }
