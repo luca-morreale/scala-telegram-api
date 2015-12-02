@@ -24,7 +24,7 @@ import org.telegram.bot.methods.BaseMethod
  *
  */
 
-class SendPhoto (token: String) extends BaseMethod(token) with MediaSender[OutgoingAudio] {
+class SendPhoto (token: String) extends BaseMethod(token) with MediaSender[OutgoingPhoto] {
 
     override def url(): String = super.url + token + "/" + "sendphoto"
 
