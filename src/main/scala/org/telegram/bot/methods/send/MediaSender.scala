@@ -26,18 +26,9 @@ import java.io.IOException
 
 trait MediaSender[T <: OutgoingData] extends DataSender[T] {
 
-    override def run():Unit = {
-        val out = this.get
-        while(true) {
+    override def send(out: OutgoingData): Unit = {
 
-            try {
-                sendMultipart(out)
-            } catch {
-                case ioe: IOException =>
-                    logger.error(ioe)
-                    accept(out)
-                    throw new SendingException
-            }
-        }
+        val multipart = out.buildMultipart.build
+        sendData(multipart)
     }
 }

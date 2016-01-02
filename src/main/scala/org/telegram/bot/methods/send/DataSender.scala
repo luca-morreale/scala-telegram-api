@@ -54,24 +54,17 @@ trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
         }
     }
 
+    def send(out: OutgoingData): Unit = {
+
+        val pairs = out.buildPairsList
+        sendData(pairsToEntity(pairs))
+    }
+
     protected def httpClient(): CloseableHttpClient
 
     protected def debug(http: HttpPost, entity: HttpEntity): Unit
 
-    protected def send(out: OutgoingData): Unit = {
-
-        val pairs = out.buildPairsList
-
-        sendData(pairsToEntity(pairs))
-    }
-
-    protected def sendMultipart(out: OutgoingData): Unit = {
-
-        val multipart = out.buildMultipart.build
-        sendData(multipart)
-    }
-
-    private def sendData(entity: HttpEntity) = {
+    protected def sendData(entity: HttpEntity) = {
 
         val httpPost = generateHttpPost(url, entity)
         debug(httpPost, entity)
