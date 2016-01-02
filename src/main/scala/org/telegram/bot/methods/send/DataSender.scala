@@ -22,14 +22,13 @@ import org.apache.http.NameValuePair
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.HttpEntity
-
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.util.Consumer
-
 import java.io.IOException
+import org.telegram.bot.methods.send.exception.SendingException
 
 /**
  *

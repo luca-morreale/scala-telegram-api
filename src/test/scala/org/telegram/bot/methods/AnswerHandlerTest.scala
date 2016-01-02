@@ -20,17 +20,15 @@ package org.telegram.bot.methods
 
 import org.apache.http.HttpEntity
 import org.apache.http.HttpResponse
+import org.apache.http.StatusLine
+import org.apache.http.client.ClientProtocolException
+
 import org.hamcrest.core.IsNull.nullValue
-import org.hamcrest.core.Is.is
 import org.junit.Assert.assertThat
 import org.junit.Test
+
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.when
-import org.apache.http.StatusLine
-import org.apache.http.ProtocolVersion
-import org.apache.http.entity.BufferedHttpEntity
-import org.apache.http.util.EntityUtils
-import org.apache.http.client.ClientProtocolException
 
 
 class AnswerHandlerTest {

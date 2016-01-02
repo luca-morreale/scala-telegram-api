@@ -16,7 +16,7 @@
  *
  */
 
-package org.telegram.bot.methods.send
+package org.telegram.bot.methods.send.exception
 
 /**
  *
