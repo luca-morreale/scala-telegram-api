@@ -25,27 +25,21 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.HttpEntity
 
-import scala.collection.immutable.HashMap
 import scala.collection.JavaConverters.seqAsJavaListConverter
 
-/**
- *
- */
 
 package object methods {
 
     /**
      * Generates an HttPost class with base header and the given parameters.
-     * @params url              url of the server
-     * @params entity           post parameters
+     * @param url              url of the server
+     * @param entity           post parameters
      */
     def generateHttpPost(url: String, entity: HttpEntity):HttpPost = {
         val http = generateHttpPost(url)
         http.setEntity(entity)
         http
     }
-
-    def pairsToEntity(pairs: List[NameValuePair]): HttpEntity = new UrlEncodedFormEntity(pairs.asJava, "UTF-8")
 
     def generateHttpPost(url: String):HttpPost = {
         val http = new HttpPost(url)
@@ -54,7 +48,15 @@ package object methods {
         http
     }
 
-    def buildValuePairs(pairs: HashMap[String, String]): List[NameValuePair] = {
+    /**
+     * Creates and HttpEntity from a List of NameValuePair
+     */
+    def pairsToEntity(pairs: List[NameValuePair]): HttpEntity = new UrlEncodedFormEntity(pairs.asJava, "UTF-8")
+
+    /**
+     * Transforms a Map into a list of NameValuePair
+     */
+    def buildValuePairs(pairs: Map[String, String]): List[NameValuePair] = {
         val values = for{ value <- pairs }
                     yield { new BasicNameValuePair(value._1, value._2) }
 

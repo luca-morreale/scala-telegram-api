@@ -24,7 +24,8 @@ import org.apache.http.HttpEntity
 import org.telegram.bot.util.BotLogger
 
 /**
- *
+ * Simple trait which provide some shortcut to log
+ * HttpPost and HttpEntity
  */
 
 trait MethodDebugger {

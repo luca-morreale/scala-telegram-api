@@ -27,45 +27,37 @@ import org.apache.http.NameValuePair
 
 import java.util.concurrent.TimeUnit
 
-import org.json4s.jackson.JsonMethods.parse
-
-import org.telegram.bot.api.formats
 import org.telegram.bot.util.BotLogger
 
 /**
- *
+ * Base class which provides basic functionalities
+ * usable for both send and receive methods.
  */
 
-abstract class BaseMethod(token: String, timeout: Int=BaseMethod.defaultTimeout) extends Method {
+abstract class BaseMethod(token: String, timeout: Int=BaseMethod.defaultTimeout) {
 
     private val log = BotLogger.getLogger(classOf[BaseMethod].getName)
 
     private val closeableHTTPClient = HttpClientBuilder.create.setSSLHostnameVerifier(new NoopHostnameVerifier)
                                                                 .setConnectionTimeToLive(timeout, TimeUnit.SECONDS).build
 
+    /**
+     * Returns the URL to reach the service exploited by the bot
+     */
     def url(): String = "https://api.telegram.org/bot"
 
+    /**
+     * Returns the unique token of the bot
+     */
     def token(): String = token
 
     protected def logger(): BotLogger = log
 
     protected def httpClient(): CloseableHttpClient = closeableHTTPClient
 
-    protected def handleAnswer[API: Manifest](httpClient: CloseableHttpClient, httpPost: HttpPost): Option[API] = {
-        try {
-            val response = httpClient.execute(httpPost, new AnswerHandler)
-            val json = parse(response) \ "result"
-            json.extractOpt[API]
-        } catch {
-            case cp: ClientProtocolException =>
-                log.debug(cp)
-                None
-        }
-    }
 }
 
-
-private object BaseMethod {
+object BaseMethod {
 
     val defaultTimeout = 20
 }

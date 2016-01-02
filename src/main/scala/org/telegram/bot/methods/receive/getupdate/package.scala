@@ -25,9 +25,6 @@ import org.apache.http.message.BasicNameValuePair
 
 import scala.collection.immutable.HashMap
 
-/**
- *
- */
 
 package object getupdate {
 
@@ -45,10 +42,16 @@ package object getupdate {
 
     @volatile private var counter = new UpdateCounter(defaultOffset, defaultLimit, defaultTimeout)
 
+    /**
+     * Returns as String the update's parameters
+     */
     def urlParams(): String = counter.urlParams
 
+    /**
+     * Generates the pairs to be sent to telegram in order to download the right updates
+     */
     def generateUpdatePairs(): List[NameValuePair] = {
-        buildValuePairs(HashMap(
+        buildValuePairs(Map(
                 getupdate.OFFSET_FIELD -> (counter.offset + 1).toString,
                 getupdate.LIMIT_FIELD -> counter.limit.toString,
                 getupdate.TIMEOUT_FIELD -> counter.timeout.toString

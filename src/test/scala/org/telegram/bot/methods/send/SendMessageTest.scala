@@ -35,7 +35,8 @@ import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
 
 /**
- *
+ * This test is intended for all classes which use DataSender as parent trait,
+ * because all of them use the same methods changing just the OutgoindData used.
  */
 
 class SendMessageTest {

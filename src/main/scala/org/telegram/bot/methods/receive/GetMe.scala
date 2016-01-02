@@ -21,7 +21,6 @@ package org.telegram.bot.methods.receive
 import org.telegram.bot.methods.receive.getupdate.UpdateProducer
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.MethodDebugger
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.api.User
 
@@ -31,13 +30,19 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier
 import java.util.concurrent.TimeUnit
 
 /**
- *
+ * Class which provides the getme method.
  */
 
-class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token) with MethodDebugger {
+class GetMe(token: String, timeout: Int, name: String) extends DataReceiver(token) with MethodDebugger {
 
     override def url(): String = super.url + token + "/" + "getme"
 
+    /**
+     * Sends a request to telegram's getme method.
+     *
+     * @param file_id   identifier of the file
+     * @return          in case of positive answer returns an API File class
+     */
     def request(): Option[User] = {
         val httpPost = generateHttpPost(url)
 
@@ -45,6 +50,10 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseMethod(token)
         handleAnswer[User](httpClient, httpPost)
     }
 
+    /**
+     * Checks the token given and the one received form telegram
+     * are the same.
+     */
     def checkToken(): Boolean = {
         val userOpt = request
         if(userOpt == None) {

@@ -28,7 +28,6 @@ import scala.io.Source
 
 import org.telegram.bot.api.File
 import org.telegram.bot.util.BotLogger
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
 import org.telegram.bot.methods.pairsToEntity
@@ -37,13 +36,20 @@ import org.telegram.bot.methods.generateHttpPost
 import spray.can.Http
 
 /**
- *
+ * Class which provides the getfile method.
  */
 
-class GetFile(token: String) extends BaseMethod(token) with MethodDebugger {
+class GetFile(token: String) extends DataReceiver(token) with MethodDebugger {
 
     override def url(): String = super.url + token + "/" + "getfile"
 
+    /**
+     * Performs a request to telegram asking for the specified file,
+     * in case of successful request it returns the API File class.
+     *
+     * @param file_id   identifier of the file
+     * @return          in case of positive answer returns an API File class
+     */
     def request(file_id: Int): Option[File] = {
         val pairs = buildValuePairs(HashMap("file_id" -> file_id.toString))
         val entity = pairsToEntity(pairs)
@@ -54,6 +60,12 @@ class GetFile(token: String) extends BaseMethod(token) with MethodDebugger {
         handleAnswer[File](httpClient, httpPost)
     }
 
+    /**
+     * Downloads a file form the telegram site and returns it.
+     * @param file_id       identifier of the file
+     * @param fileName      name of the file
+     * @return              reference to the file saved
+     */
     def get(file_id: Int, fileName: String): JFile = {
         val apiFile = request(file_id)
 
@@ -63,9 +75,14 @@ class GetFile(token: String) extends BaseMethod(token) with MethodDebugger {
         } else {
             throw new Exception("impossible to downlod the file")
         }
-
     }
 
+    /**
+     * Downloads a file for the telegram site and returns a BufferedSource reference.
+     * @param file_id       identifier of the file
+     * @param fileName      name of the file
+     * @return              reference to the file saved
+     */
     def getBufferedSource(file_id: Int, fileName: String): BufferedSource = {
         val apiFile = request(file_id)
 

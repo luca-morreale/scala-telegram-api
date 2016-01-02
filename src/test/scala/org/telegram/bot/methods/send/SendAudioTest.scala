@@ -37,7 +37,8 @@ import org.telegram.bot.methods.pairsToEntity
 import java.io.File
 
 /**
- *
+ * This test is intended for all classes which use MediaSender as parent trait,
+ * because all of them use the same methods changing just the OutgoindData used.
  */
 
 class SendAudioTest {

@@ -22,7 +22,7 @@ import org.telegram.bot.util.Consumer
 import org.telegram.bot.api.Update
 
 /**
- *
+ * Class which calls each callback
  */
 
 class UpdateConsumer extends Consumer[Update] {
@@ -37,8 +37,14 @@ class UpdateConsumer extends Consumer[Update] {
         }
     }
 
+    /**
+     * Adds a callback.
+     */
     def addCallback(callback: Update => Unit):Unit = callbacks ::= callback
 
+    /**
+     * Removes a callback.
+     */
     def removeCallback(callback: Update => Unit):Unit = callbacks = callbacks filterNot callback.eq
 
 }

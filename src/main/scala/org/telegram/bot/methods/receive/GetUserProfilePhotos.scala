@@ -19,7 +19,6 @@
 package org.telegram.bot.methods.receive
 
 import org.telegram.bot.util.BotLogger
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.api.UserProfilePhotos
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.pairsToEntity
@@ -31,13 +30,22 @@ import java.util.concurrent.TimeUnit
 import scala.collection.immutable.HashMap
 
 /**
- *
+ * Class which provides the getuserprofilephotos method.
  */
 
-class GetUserProfilePhotos(token: String, timeout: Int) extends BaseMethod(token) with MethodDebugger {
+class GetUserProfilePhotos(token: String, timeout: Int) extends DataReceiver(token) with MethodDebugger {
 
     override def url(): String = super.url + token + "/" + "getuserprofilephotos"
 
+    /**
+     * Performs a request to telegram asking for the user's
+     * profile photos.
+     *
+     * @param user_id   identifier of the user
+     * @param offset    offset
+     * @param limit     limit of the photo to save
+     * @return          in case of positive answer returns an API File class
+     */
     def request(user_id: Int, offset: Int, limit: Int): Option[UserProfilePhotos] = {
 
         val pairs = buildValuePairs(HashMap("user_id" -> user_id.toString,

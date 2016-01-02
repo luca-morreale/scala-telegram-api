@@ -26,12 +26,12 @@ import org.apache.http.NameValuePair
 
 import org.telegram.bot.api.Update
 import org.telegram.bot.util.BotLogger
-import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.util.PriorityProducer
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.methods.pairsToEntity
+import org.telegram.bot.methods.receive.DataReceiver
 
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.string2JsonInput
@@ -43,7 +43,7 @@ import org.json4s.jvalue2monadic
  */
 
 class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
-                                extends BaseMethod(token, timeout) with MethodDebugger with PriorityProducer[Update] {
+                                extends DataReceiver(token, timeout) with MethodDebugger with PriorityProducer[Update] {
 
     override def url(): String = super.url + token + "/" + "getupdates"
 
@@ -51,17 +51,15 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
 
     private val limit = 100
 
+    /**
+     * Main body of the class, send the requests and parse the incoming updates.
+     */
     def run(): Unit = {
         while(true) {
-
-            val pairs = generateUpdatePairs(offset, limit, timeout)
-            val entity = pairsToEntity(pairs)
-            val httpPost = generateHttpPost(url, entity)
-
-            debug(httpPost, entity)
+            val post = generatePostRequest
 
             try {
-                val updateList = fetchUpdates(httpPost)
+                val updateList = fetchUpdates(post)
                 addUpdatesToQueue(updateList)
                 updateOffset(updateList)
             } catch {
@@ -72,6 +70,17 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
         }
     }
 
+    private def generatePostRequest(): HttpPost = {
+        val entity = pairsToEntity(generateUpdatePairs(offset, limit, timeout))
+        val post = generateHttpPost(url, entity)
+
+        debug(post, entity)
+        post
+    }
+
+    /**
+     * Returns the last update id downloaded
+     */
     def updateOffset(): Int = offset
 
     private def fetchUpdates(httpPost: HttpPost): List[Update] = {
