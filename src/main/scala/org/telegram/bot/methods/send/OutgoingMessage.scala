@@ -32,8 +32,8 @@ import org.apache.http.entity.mime.MultipartEntityBuilder
 class OutgoingMessage(chatId: Int,
                         text: String,
                         disableWebPagePreview: Boolean,
-                        replayToMessageId: Option[Int]=None,
-                        replayMarkup: Option[ReplyKeyboard]=None
+                        replayToMessageId: Option[Int] = None,
+                        replayMarkup: Option[ReplyKeyboard] = None
                         ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
     override def buildPairsList(): List[NameValuePair] = {

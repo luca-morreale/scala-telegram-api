@@ -29,6 +29,7 @@ import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.util.Consumer
 import java.io.IOException
 import org.telegram.bot.methods.send.exception.SendingException
+import org.apache.http.client.ClientProtocolException
 
 /**
  *
@@ -49,26 +50,42 @@ trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
                     logger.error(ioe)
                     accept(out)
                     throw new SendingException
+                case _: ClientProtocolException =>
+
             }
         }
     }
 
     def send(out: OutgoingData): Unit = {
-
         val pairs = out.buildPairsList
         sendData(pairsToEntity(pairs))
     }
 
     protected def httpClient(): CloseableHttpClient
 
-    protected def debug(http: HttpPost, entity: HttpEntity): Unit
+    protected def sendData(entity: HttpEntity, resendCounter :Int=0): Unit = {
+        if(resendCounter > 10) return
 
-    protected def sendData(entity: HttpEntity) = {
+        try {
+            val httpPost = generateHttpPost(url, entity)
+            debug(httpPost, entity)
 
-        val httpPost = generateHttpPost(url, entity)
-        debug(httpPost, entity)
+            httpClient.execute(httpPost, new AnswerHandler)
+        } catch {
+            case cp: ClientProtocolException =>
+                waitForResend
+                sendData(entity, resendCounter + 1)
+        }
+    }
 
-        httpClient.execute(httpPost, new AnswerHandler)
+    private def waitForResend() = {
+        try {
+            this.synchronized{
+                this wait 100
+            }
+        } catch {
+            case ie: InterruptedException => logger.error(ie)
+        }
     }
 
 }

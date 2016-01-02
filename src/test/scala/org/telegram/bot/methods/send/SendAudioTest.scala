@@ -34,24 +34,26 @@ import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
 
+import java.io.File
+
 /**
  *
  */
 
-class SendMessageTest {
+class SendAudioTest {
 
     private val mockedClient = mock(classOf[CloseableHttpClient])
     @Captor val captor: ArgumentCaptor[HttpPost] = ArgumentCaptor.forClass(classOf[HttpPost])
 
-    private class SendMessageTestable(token: String) extends SendMessage(token) {
+    private class SendAudioTestable(token: String) extends SendAudio(token) {
         override protected def httpClient(): CloseableHttpClient = mockedClient
     }
 
-    @Test def testSendData(): Unit = {
-        val sender = new SendMessageTestable("token")
-        val msg = new OutgoingMessage(0, "text of the message", false)
+    @Test def testSendMedia(): Unit = {
+        val sender = new SendAudioTestable("token")
+        val msg = new OutgoingAudio(0, new File("no_file.mp3"), Some(3))
 
-        val entity = pairsToEntity(msg.buildPairsList)
+        val entity = msg.buildMultipart.build
         val httpPost = generateHttpPost(sender.url, entity)
 
         sender.send(msg)

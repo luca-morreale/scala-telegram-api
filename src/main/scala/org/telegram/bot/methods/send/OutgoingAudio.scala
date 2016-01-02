@@ -34,11 +34,11 @@ import java.io.File
 
 class OutgoingAudio(chatId: Int,
                         audio: File,
-                        duration: Option[Int],
-                        performer: Option[Int],
-                        title: Option[String],
-                        replayToMessageId: Option[Int],
-                        replayMarkup: Option[ReplyKeyboard]
+                        duration: Option[Int] = None,
+                        performer: Option[Int] = None,
+                        title: Option[String] = None,
+                        replayToMessageId: Option[Int] = None,
+                        replayMarkup: Option[ReplyKeyboard] = None
                         ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
     override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("An audio message can not be sent using NameValuePair.")
