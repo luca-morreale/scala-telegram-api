@@ -18,15 +18,16 @@
 
 package org.telegram.bot.api
 
-
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
+import org.junit.Test
+
 import org.hamcrest.core.Is.is
 import org.hamcrest.core.IsNot.not
 import org.hamcrest.CoreMatchers.notNullValue
-import org.junit.Test
+
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.string2JsonInput
 import org.json4s.jvalue2monadic
