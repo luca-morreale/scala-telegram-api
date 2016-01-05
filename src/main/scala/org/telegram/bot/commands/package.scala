@@ -21,11 +21,14 @@ package org.telegram.bot
 import org.telegram.bot.api.Message
 
 /**
- *
+ * Packages containing utility for the command classes.
  */
 
 package object commands {
 
+    /**
+     * Function type of callback methods.
+     */
     type CommandCallback = (Message, String) => Unit
 
 }

@@ -23,7 +23,7 @@ import scala.util.matching.Regex
 
 
 /**
- *
+ * Class allowing to match commands.
  */
 
 class CommandMatcher(botName: String, commandMap: Map[String, CommandCallback]) extends RegexCommand {
@@ -32,22 +32,44 @@ class CommandMatcher(botName: String, commandMap: Map[String, CommandCallback]) 
         this(botName, Map())
     }
 
+    /**
+     * Sets the callback for the start command.
+     */
     def setStartCommand(method: CommandCallback): CommandMatcher = {
         new CommandMatcher(botName, commandMap + ("/start" -> method))
     }
 
+    /**
+     * Sets the callback for the stop command.
+     */
     def setStopCommand(method: CommandCallback): CommandMatcher = {
         new CommandMatcher(botName, commandMap + ("/stop" -> method))
     }
 
+    /**
+     * Sets the callback for the help command.
+     */
     def setHelpCommand(method: CommandCallback): CommandMatcher = {
         new CommandMatcher(botName, commandMap + ("/help" -> method))
     }
 
+    /**
+     * Adds a command to the list of commands to be matched.
+     *
+     * @param command       command to be matched(the '/' will not be added)
+     * @param callback      method to be called when the command has been matched
+     */
     def addCommand(command: String, callback: CommandCallback): CommandMatcher = {
         new CommandMatcher(botName, commandMap + (command -> callback))
     }
 
+    /**
+     * Matchs the command inside the message text, and calls the callback.
+     *
+     * @param message   message received with an update
+     * @throw UnknownCommandException if no command has been matched or the message
+     *              does not contain any text.
+     */
     def matchCommand(message: Message): Unit = {
 
         if(!message.text.isDefined) {
@@ -60,7 +82,7 @@ class CommandMatcher(botName: String, commandMap: Map[String, CommandCallback]) 
         }
     }
 
-    protected def matchText(pattern: Regex, message: Message, callback: CommandCallback): Boolean = {
+    private def matchText(pattern: Regex, message: Message, callback: CommandCallback): Boolean = {
         val text = message.text.get
         text match {
             case pattern(_, params) =>

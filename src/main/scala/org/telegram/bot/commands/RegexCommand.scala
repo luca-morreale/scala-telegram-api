@@ -21,14 +21,26 @@ package org.telegram.bot.commands
 import scala.util.matching.Regex
 
 /**
- *
+ * This trait contains the basic methods which allows to create
+ * regular expression pattern for the commands.
  */
+
 trait RegexCommand {
 
+    /**
+     * Returns the regex to match words after the command.
+     */
     protected def wordPattern = "(|\\s[\\s\\w]*)"
 
+    /**
+     * Returns the regex to match the command, with or without.
+     * the bot's name
+     */
     protected def botNameRegex(botName: String): String = "(|@" + botName + ")"
 
+    /**
+     * Returns the regex compiled  to match commands.
+     */
     protected def regex(command: String, botName: String): Regex = (command + botNameRegex(botName) + wordPattern).r
 
 }

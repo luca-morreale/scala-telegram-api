@@ -19,7 +19,7 @@
 package org.telegram.bot.commands
 
 /**
- *
+ * Exceptions to notify the commands are not being matched.
  */
 
 class UnknownCommandException(message: String) extends RuntimeException(message) {
