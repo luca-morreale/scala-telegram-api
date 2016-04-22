@@ -22,3 +22,8 @@ package org.telegram.bot.api
  *
  */
 trait APIClass
+
+
+object APIClass {
+    val innerEntry = "result"
+}

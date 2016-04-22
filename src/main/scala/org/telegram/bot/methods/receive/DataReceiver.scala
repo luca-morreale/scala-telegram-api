@@ -21,11 +21,10 @@ package org.telegram.bot.methods.receive
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.client.methods.HttpPost
-
-import org.telegram.bot.api.formats
+import org.json4s._
+import org.telegram.bot.api.{APIClass, formats}
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.BaseMethod
-
 import org.json4s.jackson.JsonMethods.parse
 
 
@@ -35,15 +34,32 @@ import org.json4s.jackson.JsonMethods.parse
 
 abstract class DataReceiver(token: String, timeout: Int=BaseMethod.defaultTimeout) extends BaseMethod(token, timeout) {
 
-    protected def handleAnswer[API: Manifest](httpClient: CloseableHttpClient, httpPost: HttpPost): Option[API] = {
+    protected def handleAnswer[API >: Null: Manifest](httpClient: CloseableHttpClient,
+                                                            httpPost: HttpPost): Option[API] = {
+        handleAnswer[Option[API]](httpClient, httpPost, defaultConverter[API] _ )
+    }
+
+    protected def handleAnswer[API >: Null](httpClient: CloseableHttpClient,
+                                                                   httpPost: HttpPost,
+                                                                   converter: (JValue => API)): API = {
         try {
-            val response = httpClient.execute(httpPost, new AnswerHandler)
-            val json = parse(response) \ "result"
-            json.extractOpt[API]
+            val response = executeCall(httpPost)
+            val json = parseJson(response)
+            converter(json)
         } catch {
             case cp: ClientProtocolException =>
                 logger debug cp
-                None
+                null
         }
+    }
+
+    private def defaultConverter[API: Manifest](json: JValue): Option[API] = json.extractOpt[API]
+
+    protected def executeCall(httpPost: HttpPost): String = {
+        httpClient.execute(httpPost, new AnswerHandler)
+    }
+
+    protected def parseJson(response: String): JValue = {
+        parse(response) \ APIClass.innerEntry
     }
 }

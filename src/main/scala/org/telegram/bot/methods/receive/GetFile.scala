@@ -18,7 +18,7 @@
 
 package org.telegram.bot.methods.receive
 
-import java.io.{ File => JFile, FileOutputStream }
+import java.io.{ File => JFile }
 import java.net.URL
 
 import scala.collection.immutable.HashMap
@@ -27,19 +27,15 @@ import scala.io.BufferedSource
 import scala.io.Source
 
 import org.telegram.bot.api.File
-import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
-import org.telegram.bot.methods.pairsToEntity
-import org.telegram.bot.methods.generateHttpPost
 
-import spray.can.Http
 
 /**
  * Class which provides the getfile method.
  */
 
-class GetFile(token: String) extends DataReceiver(token) with MethodDebugger {
+class GetFile(token: String) extends BaseGetMethod(token) {
 
     override def url(): String = super.url + token + "/" + "getfile"
 
@@ -50,14 +46,9 @@ class GetFile(token: String) extends DataReceiver(token) with MethodDebugger {
      * @param file_id   identifier of the file
      * @return          in case of positive answer returns an API File class
      */
-    def request(file_id: Int): Option[File] = {
+    def getFile(file_id: Int): Option[File] = {
         val pairs = buildValuePairs(HashMap("file_id" -> file_id.toString))
-        val entity = pairsToEntity(pairs)
-        val httpPost = generateHttpPost(url, entity)
-
-        debug(httpPost, entity)
-
-        handleAnswer[File](httpClient, httpPost)
+        request[File](pairs)
     }
 
     /**
@@ -66,8 +57,8 @@ class GetFile(token: String) extends DataReceiver(token) with MethodDebugger {
      * @param fileName      name of the file
      * @return              reference to the file saved
      */
-    def get(file_id: Int, fileName: String): JFile = {
-        val apiFile = request(file_id)
+    def downloadFile(file_id: Int, fileName: String): JFile = {
+        val apiFile = getFile(file_id)
 
         if(apiFile.isDefined) {
             (new URL(apiFile.get.getFullPath(token)) #> new JFile(fileName)).!!
@@ -84,7 +75,7 @@ class GetFile(token: String) extends DataReceiver(token) with MethodDebugger {
      * @return              reference to the file saved
      */
     def getBufferedSource(file_id: Int, fileName: String): BufferedSource = {
-        val apiFile = request(file_id)
+        val apiFile = getFile(file_id)
 
         if(apiFile.isDefined) {
             val url = new URL(apiFile.get.getFullPath(token))

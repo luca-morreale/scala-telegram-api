@@ -18,12 +18,9 @@
 
 package org.telegram.bot.methods
 
-import org.apache.http.client.ClientProtocolException
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.NameValuePair
 
 import java.util.concurrent.TimeUnit
 

@@ -18,46 +18,31 @@
 
 package org.telegram.bot.methods.receive
 
-import org.telegram.bot.methods.receive.getupdate.UpdateProducer
-import org.telegram.bot.methods.generateHttpPost
-import org.telegram.bot.methods.MethodDebugger
-import org.telegram.bot.util.BotLogger
 import org.telegram.bot.api.User
-
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-
-import java.util.concurrent.TimeUnit
 
 /**
  * Class which provides the getme method.
  */
 
-class GetMe(token: String, timeout: Int, name: String) extends DataReceiver(token) with MethodDebugger {
+class GetMe(token: String, timeout: Int, name: String) extends BaseGetMethod(token) {
 
     override def url(): String = super.url + token + "/" + "getme"
 
     /**
      * Sends a request to telegram's getme method.
      *
-     * @param file_id   identifier of the file
-     * @return          in case of positive answer returns an API File class
+     * @return          in case of positive answer returns an API User class
      */
-    def request(): Option[User] = {
-        val httpPost = generateHttpPost(url)
-
-        debug(httpPost)
-        handleAnswer[User](httpClient, httpPost)
-    }
+    def getMe(): Option[User] = request[User]
 
     /**
      * Checks the token given and the one received form telegram
      * are the same.
      */
     def checkToken(): Boolean = {
-        val userOpt = request
+        val userOpt = getMe
         if(userOpt == None) {
-            throw new Exception("impossible to check")
+            throw new NoneUserException
         }else {
             userOpt.get.id.toString == token.split(":")(0) &&
                 userOpt.get.first_name == name

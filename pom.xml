@@ -3,8 +3,23 @@
   <groupId>telegram-api</groupId>
   <artifactId>telegram-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
-  
+
+    <repositories>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
   <dependencies>
      <dependency>
          <groupId>junit</groupId>
@@ -74,15 +89,38 @@
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
-        <configuration>
-          <source/>
-          <target/>
-        </configuration>
-      </plugin>
-    </plugins>
+
+      <plugins>
+          <plugin>
+              <groupId>org.scala-tools</groupId>
+              <artifactId>maven-scala-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>compile</goal>
+                          <goal>testCompile</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <sourceDir>src/main/java</sourceDir>
+                  <jvmArgs>
+                      <jvmArg>-Xms64m</jvmArg>
+                      <jvmArg>-Xmx1024m</jvmArg>
+                  </jvmArgs>
+              </configuration>
+          </plugin>
+
+          <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.3</version>
+              <configuration>
+                  <source/>
+                  <target/>
+              </configuration>
+          </plugin>
+
+      </plugins>
+
   </build>
 </project>

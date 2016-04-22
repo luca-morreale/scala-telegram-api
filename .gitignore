@@ -9,3 +9,6 @@ bin/
 .scalastyle
 scalastyle_configuration.xml
 *.log
+.idea/*
+.idea/**/*
+*.iml

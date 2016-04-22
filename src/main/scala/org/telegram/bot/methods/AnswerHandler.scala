@@ -43,7 +43,7 @@ class AnswerHandler extends ResponseHandler[String] {
      */
     override def handleResponse(response: HttpResponse): String = {
 
-        val status = response.getStatusLine().getStatusCode()
+        val status = response.getStatusLine.getStatusCode
         if (status >= 200 && status < 300) {
 
             val entity = response.getEntity
@@ -51,7 +51,7 @@ class AnswerHandler extends ResponseHandler[String] {
             if (entity == null) null else EntityUtils.toString(new BufferedHttpEntity(entity), "UTF-8")
 
         } else {
-            throw new ClientProtocolException("Unexpected response status: " + status);
+            throw new ClientProtocolException("Unexpected response status: " + status)
         }
     }
 }

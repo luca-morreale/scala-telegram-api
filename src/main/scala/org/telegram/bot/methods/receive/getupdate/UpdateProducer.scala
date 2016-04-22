@@ -23,8 +23,7 @@ import java.util.concurrent.TimeUnit
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.NameValuePair
-
-import org.telegram.bot.api.Update
+import org.telegram.bot.api.{APIClass, Update}
 import org.telegram.bot.util.BotLogger
 import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.util.PriorityProducer
@@ -32,10 +31,8 @@ import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.receive.DataReceiver
-
 import org.json4s.jackson.JsonMethods.parse
-import org.json4s.string2JsonInput
-import org.json4s.jvalue2monadic
+import org.json4s.{JValue, jvalue2monadic, string2JsonInput}
 
 
 /**
@@ -59,7 +56,7 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
             val post = generatePostRequest
 
             try {
-                val updateList = fetchUpdates(post)
+                val updateList = handleAnswer[List[Update]](httpClient,post, extractInformation _)
                 addUpdatesToQueue(updateList)
                 updateOffset(updateList)
             } catch {
@@ -83,21 +80,21 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
      */
     def updateOffset(): Int = offset
 
-    private def fetchUpdates(httpPost: HttpPost): List[Update] = {
-        val response = httpClient.execute(httpPost, new AnswerHandler)
-        val json = parse(response) \ "result"
-
-        for{ child <- json.children }
-            yield { new Update(child) }
+    def extractInformation(json: JValue): List[Update] = {
+        for {child <- json.children}
+            yield {
+                new Update(child)
+            }
     }
 
     private def addUpdatesToQueue(updateList: List[Update]) = {
-        updateList.filter(_.update_id > offset).foreach { this.put(_) }
+        updateList.filter(_.update_id > offset)
+                    .foreach( put(_) )
     }
 
     private def updateOffset(updateList: List[Update]) = {
-        val off = updateList.filter{ x => updateList.forall(_.update_id <= x.update_id) }
-        offset = if(off.length > 0) off(0).update_id else offset
+        val lastUpdate = updateList.filter { x => updateList.forall(_.update_id <= x.update_id) }
+        offset = if(lastUpdate.length > 0) lastUpdate(0).update_id else offset
     }
 
     private def waitForUpdates() = {

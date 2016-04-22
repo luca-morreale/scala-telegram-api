@@ -32,15 +32,22 @@ package object methods {
 
     /**
      * Generates an HttPost class with base header and the given parameters.
+     *
      * @param url              url of the server
      * @param entity           post parameters
      */
     def generateHttpPost(url: String, entity: HttpEntity):HttpPost = {
         val http = generateHttpPost(url)
-        http.setEntity(entity)
+        http setEntity entity
         http
     }
 
+    /**
+     * Generates an HttPost pointing to the address given, with the default headers.
+     *
+     * @param url      address towards send messages
+     * @return         HttpPost container configured for the actual request
+     */
     def generateHttpPost(url: String):HttpPost = {
         val http = new HttpPost(url)
         http.addHeader("Content-type", "application/x-www-form-urlencoded")
@@ -50,16 +57,28 @@ package object methods {
 
     /**
      * Creates and HttpEntity from a List of NameValuePair
+     *
+     * @param pairs     the list of pairs to be fetched and included in the Entity
+     * @return          HttpEntity containing the given pairs
      */
     def pairsToEntity(pairs: List[NameValuePair]): HttpEntity = new UrlEncodedFormEntity(pairs.asJava, "UTF-8")
 
     /**
      * Transforms a Map into a list of NameValuePair
+     *
+     * @param pairs     the couple key-value to be converted into NameValuePair
+     * @return          a list of NameValuePair
      */
     def buildValuePairs(pairs: Map[String, String]): List[NameValuePair] = {
-        val values = for{ value <- pairs }
-                    yield { new BasicNameValuePair(value._1, value._2) }
+        extrtactIterablePair(pairs)
+            .asInstanceOf[List[NameValuePair]]
 
-        values.asInstanceOf[List[NameValuePair]]
+    }
+
+    private def extrtactIterablePair(pairs: Map[String, String]): Iterable[BasicNameValuePair] = {
+        for {value <- pairs
+        } yield {
+            new BasicNameValuePair(value._1, value._2)
+        }
     }
 }
