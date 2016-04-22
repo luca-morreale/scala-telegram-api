@@ -19,6 +19,7 @@
 package org.telegram.bot.methods.receive
 
 import org.telegram.bot.api.User
+import org.telegram.bot.methods.receive.exception.NoneAPIException
 
 /**
  * Class which provides the getme method.
@@ -42,7 +43,7 @@ class GetMe(token: String, timeout: Int, name: String) extends BaseGetMethod(tok
     def checkToken(): Boolean = {
         val userOpt = getMe
         if(userOpt == None) {
-            throw new NoneUserException
+            throw new NoneAPIException
         }else {
             userOpt.get.id.toString == token.split(":")(0) &&
                 userOpt.get.first_name == name

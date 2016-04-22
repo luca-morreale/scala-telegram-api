@@ -27,8 +27,8 @@ import scala.io.BufferedSource
 import scala.io.Source
 
 import org.telegram.bot.api.File
-import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.buildValuePairs
+import org.telegram.bot.methods.receive.exception.NoneAPIException
 
 
 /**
@@ -64,7 +64,7 @@ class GetFile(token: String) extends BaseGetMethod(token) {
             (new URL(apiFile.get.getFullPath(token)) #> new JFile(fileName)).!!
             new JFile(fileName)
         } else {
-            throw new Exception("impossible to downlod the file")
+            throw new NoneAPIException
         }
     }
 
