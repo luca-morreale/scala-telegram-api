@@ -16,20 +16,18 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
-import org.telegram.bot.methods.send.exception.EntityNotSupportedException
-
-import org.apache.http.NameValuePair
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.entity.mime.content.{StringBody, FileBody}
+package org.telegram.bot.methods.send.data
 
 import java.io.File
 
+import org.apache.http.NameValuePair
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.FileBody
+import org.telegram.bot.api.ReplyKeyboard
+import org.telegram.bot.methods.send.exception.EntityNotSupportedException
+
 /**
- *
+ * An outgoing audio message
  */
 
 class OutgoingAudio(chatId: Int,

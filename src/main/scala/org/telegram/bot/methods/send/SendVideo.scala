@@ -19,6 +19,7 @@
 package org.telegram.bot.methods.send
 
 import org.telegram.bot.methods.BaseMethod
+import org.telegram.bot.methods.send.data.OutgoingVideo
 
 /**
  *

@@ -19,7 +19,7 @@
 package org.telegram.bot.methods.send.exception
 
 /**
- *
+ * Exception used to signal that a strange error occurred, therefore the message has not been delivered.
  */
 
 class SendingException(msg: String) extends RuntimeException(msg) {

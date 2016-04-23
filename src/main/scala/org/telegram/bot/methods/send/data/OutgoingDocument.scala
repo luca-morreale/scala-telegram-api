@@ -16,47 +16,34 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
-import org.telegram.bot.methods.send.exception.EntityNotSupportedException
-
-import org.apache.http.NameValuePair
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.entity.mime.content.{StringBody, FileBody}
+package org.telegram.bot.methods.send.data
 
 import java.io.File
 
+import org.apache.http.NameValuePair
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.FileBody
+import org.telegram.bot.api.ReplyKeyboard
+import org.telegram.bot.methods.send.exception.EntityNotSupportedException
+
 /**
- *
+ * An outgoing document message
  */
 
-class OutgoingVideo(chatId: Int,
-                        video: File,
-                        duration: Option[Int],
-                        caption: Option[String],
+class OutgoingDocument(chatId: Int,
+                        document: File,
                         replayToMessageId: Option[Int],
                         replayMarkup: Option[ReplyKeyboard]
                         ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
-    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("An audio message can not be sent using NameValuePair.")
+    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("A document message can not be sent using NameValuePair.")
 
-    override def buildMultipart(): MultipartEntityBuilder = {
-        optPart(OutgoingVideoField.duration, duration,
-            optPart(OutgoingVideoField.caption, caption,
-                    super.buildMultipart.addPart(OutgoingVideoField.video, new FileBody(video))
-        ))
-    }
+    override def buildMultipart(): MultipartEntityBuilder = super.buildMultipart.addPart(OutgoingDocumentField.document, new FileBody(document))
 
 }
 
-object OutgoingVideoField {
+object OutgoingDocumentField {
 
-    val video = "video"
-
-    val duration = "duration"
-
-    val caption = "caption"
+    val document = "document"
 
 }

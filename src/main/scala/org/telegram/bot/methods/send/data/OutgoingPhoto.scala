@@ -16,36 +16,38 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
-import org.telegram.bot.methods.send.exception.EntityNotSupportedException
-
-import org.apache.http.NameValuePair
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.entity.mime.content.{StringBody, FileBody}
+package org.telegram.bot.methods.send.data
 
 import java.io.File
 
+import org.apache.http.NameValuePair
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.FileBody
+import org.telegram.bot.api.ReplyKeyboard
+import org.telegram.bot.methods.send.exception.EntityNotSupportedException
+
 /**
- *
+ * An outgoing photo message
  */
 
-class OutgoingDocument(chatId: Int,
-                        document: File,
+class OutgoingPhoto(chatId: Int,
+                        photo: File,
+                        caption: Option[String],
                         replayToMessageId: Option[Int],
                         replayMarkup: Option[ReplyKeyboard]
-                        ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
+                        ) extends OutgoingData(chatId, None, None) {
 
-    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("An audio message can not be sent using NameValuePair.")
+    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("A photo message can not be sent using NameValuePair.")
 
-    override def buildMultipart(): MultipartEntityBuilder = super.buildMultipart.addPart(OutgoingDocumentField.document, new FileBody(document))
+    override def buildMultipart(): MultipartEntityBuilder = optPart(OutgoingPhotoField.caption, caption,
+                                                                super.buildMultipart.addPart(OutgoingPhotoField.photo, new FileBody(photo)))
 
 }
 
-object OutgoingDocumentField {
+object OutgoingPhotoField {
 
-    val document = "document"
+    val photo = "photo"
+
+    val caption = "caption"
 
 }

@@ -16,43 +16,38 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
-import org.telegram.bot.methods.send.exception.EntityNotSupportedException
+package org.telegram.bot.methods.send.data
 
 import org.apache.http.NameValuePair
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.entity.mime.content.{StringBody, FileBody}
-
-import java.io.File
+import org.apache.http.entity.mime.content.StringBody
+import org.telegram.bot.api.ReplyKeyboard
 
 /**
- *
+ * An outgoing location message
  */
 
-class OutgoingVoice(chatId: Int,
-                        voice: File,
-                        duration: Option[Int],
+class OutgoingLocation (chatId: Int,
+                        latitude: Float,
+                        longitude: Float,
                         replayToMessageId: Option[Int],
                         replayMarkup: Option[ReplyKeyboard]
                         ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
-    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("An audio message can not be sent using NameValuePair.")
+    override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingLocationField.latitude, latitude.toString) ::
+                                                            buildPair(OutgoingLocationField.longitude, longitude.toString) :: super.buildPairsList
 
-    override def buildMultipart(): MultipartEntityBuilder = {
-        optPart(OutgoingVoiceField.duration, duration,
-            super.buildMultipart.addPart(OutgoingVoiceField.voice, new FileBody(voice))
-        )
-    }
+    override def buildMultipart(): MultipartEntityBuilder = super.buildMultipart
+                                                            .addPart(OutgoingLocationField.latitude, new StringBody(latitude.toString, ContentType.TEXT_PLAIN))
+                                                            .addPart(OutgoingLocationField.longitude, new StringBody(longitude.toString, ContentType.TEXT_PLAIN))
 
 }
 
-object OutgoingVoiceField {
+object OutgoingLocationField {
 
-    val voice = "voice"
+    val latitude = "latitude"
 
-    val duration = "duration"
+    val longitude = "longitude"
 
 }

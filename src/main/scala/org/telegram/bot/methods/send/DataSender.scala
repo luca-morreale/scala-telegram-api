@@ -18,36 +18,45 @@
 
 package org.telegram.bot.methods.send
 
-import org.apache.http.NameValuePair
-import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.client.ClientProtocolException
 import org.apache.http.HttpEntity
+import org.telegram.bot.methods.send.exception.SendingException
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.MethodDebugger
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
 import org.telegram.bot.util.Consumer
 import java.io.IOException
-import org.telegram.bot.methods.send.exception.SendingException
-import org.apache.http.client.ClientProtocolException
+
+import org.telegram.bot.methods.send.data.OutgoingData
+
 
 /**
- *
+ * Trait containing the base methods to send message to every possible type of service
  */
 
 trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
 
+    /**
+     * URL of the service where deliver the message
+     *
+     * @return      the url of the service
+     */
     def url(): String
 
+    /**
+     * Body of the trait, perform a continuous polling over the internal queue, and sends the message polled
+     */
     override def run():Unit = {
-        val out = this.get
         while(true) {
+            val out = this.get
 
             try {
                 send(out)
             } catch {
                 case ioe: IOException =>
-                    logger.error(ioe)
+                    logger error ioe
                     accept(out)
                     throw new SendingException
                 case _: ClientProtocolException =>
@@ -56,6 +65,11 @@ trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
         }
     }
 
+    /**
+     * Delivers the message to the URL
+     *
+     * @param out   message to deliver
+     */
     def send(out: OutgoingData): Unit = {
         val pairs = out.buildPairsList
         sendData(pairsToEntity(pairs))
@@ -63,6 +77,12 @@ trait DataSender[T <: OutgoingData] extends MethodDebugger with Consumer[T] {
 
     protected def httpClient(): CloseableHttpClient
 
+    /**
+     * Tries to send the message, if after 10 times still fails it throws an exception
+     *
+     * @param entity            entity containing the whole information
+     * @param resendCounter     counter of attempts
+     */
     protected def sendData(entity: HttpEntity, resendCounter :Int=0): Unit = {
         if(resendCounter > 10) return
 

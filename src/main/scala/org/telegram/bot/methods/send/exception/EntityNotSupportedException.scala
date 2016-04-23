@@ -19,7 +19,7 @@
 package org.telegram.bot.methods.send.exception
 
 /**
- *
+ * Exception which signal that the pair content is not compatible with the type of request
  */
 
 class EntityNotSupportedException(msg: String) extends RuntimeException(msg) {

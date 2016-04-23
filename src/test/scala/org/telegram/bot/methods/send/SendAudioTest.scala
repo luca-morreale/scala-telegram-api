@@ -20,21 +20,19 @@ package org.telegram.bot.methods.send
 
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.CloseableHttpClient
-
 import org.junit.Assert.assertEquals
 import org.junit.Test
-
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-
 import org.telegram.bot.methods.AnswerHandler
 import org.telegram.bot.methods.generateHttpPost
 import org.telegram.bot.methods.pairsToEntity
-
 import java.io.File
+
+import org.telegram.bot.methods.send.data.OutgoingAudio
 
 /**
  * This test is intended for all classes which use MediaSender as parent trait,

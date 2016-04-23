@@ -18,10 +18,10 @@
 
 package org.telegram.bot.methods.send
 
-import java.io.IOException
+import org.telegram.bot.methods.send.data.OutgoingData
 
 /**
- *
+ * Extention to DataSender which is able to deliver media content, such as audio
  */
 
 trait MediaSender[T <: OutgoingData] extends DataSender[T] {

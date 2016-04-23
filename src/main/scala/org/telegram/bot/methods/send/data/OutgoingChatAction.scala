@@ -16,34 +16,27 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
+package org.telegram.bot.methods.send.data
 
 import org.apache.http.NameValuePair
 import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.content.StringBody
 import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.StringBody
 
 /**
- *
+ * An outgoing chat action message
  */
 
-class OutgoingSticker(chatId: Int,
-                        sticker: String,
-                        replayToMessageId: Option[Int],
-                        replayMarkup: Option[ReplyKeyboard]
-                        ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
+class OutgoingChatAction(chatId: Int, action: String) extends OutgoingData(chatId, None, None) {
 
-    override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingStickerField.sticker, sticker) :: super.buildPairsList
+    override def buildPairsList(): List[NameValuePair] = buildPair(OutgoingChatActionField.action, action) :: super.buildPairsList
 
     override def buildMultipart(): MultipartEntityBuilder = super.buildMultipart
-                                                                        .addPart(OutgoingStickerField.sticker, new StringBody(sticker, ContentType.TEXT_PLAIN))
-
+                                                                        .addPart(OutgoingChatActionField.action, new StringBody(action, ContentType.TEXT_PLAIN))
 }
 
-object OutgoingStickerField {
+object OutgoingChatActionField {
 
-    val sticker = "sticker"
+    val action = "action"
 
 }

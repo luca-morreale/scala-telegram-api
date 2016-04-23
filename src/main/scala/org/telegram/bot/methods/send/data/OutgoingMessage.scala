@@ -16,17 +16,16 @@
  *
  */
 
-package org.telegram.bot.methods.send
-
-import org.telegram.bot.api.ReplyKeyboard
+package org.telegram.bot.methods.send.data
 
 import org.apache.http.NameValuePair
 import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.content.StringBody
 import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.StringBody
+import org.telegram.bot.api.ReplyKeyboard
 
 /**
- *
+ * An outgoing text message
  */
 
 class OutgoingMessage(chatId: Int,

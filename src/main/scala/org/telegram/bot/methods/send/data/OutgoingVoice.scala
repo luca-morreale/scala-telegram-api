@@ -16,38 +16,41 @@
  *
  */
 
-package org.telegram.bot.methods.send
+package org.telegram.bot.methods.send.data
 
 import java.io.File
 
 import org.apache.http.NameValuePair
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.entity.mime.content.FileBody
-
 import org.telegram.bot.api.ReplyKeyboard
 import org.telegram.bot.methods.send.exception.EntityNotSupportedException
 
 /**
- * @author luca
+ * An outgoing voice message
  */
-class OutgoingPhoto(chatId: Int,
-                        photo: File,
-                        caption: Option[String],
+
+class OutgoingVoice(chatId: Int,
+                        voice: File,
+                        duration: Option[Int],
                         replayToMessageId: Option[Int],
                         replayMarkup: Option[ReplyKeyboard]
-                        ) extends OutgoingData(chatId, None, None) {
+                        ) extends OutgoingData(chatId, replayToMessageId, replayMarkup) {
 
-    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("An audio message can not be sent using NameValuePair.")
+    override def buildPairsList(): List[NameValuePair] = throw new EntityNotSupportedException("A voice message can not be sent using NameValuePair.")
 
-    override def buildMultipart(): MultipartEntityBuilder = optPart(OutgoingPhotoField.caption, caption,
-                                                                super.buildMultipart.addPart(OutgoingPhotoField.photo, new FileBody(photo)))
+    override def buildMultipart(): MultipartEntityBuilder = {
+        optPart(OutgoingVoiceField.duration, duration,
+            super.buildMultipart.addPart(OutgoingVoiceField.voice, new FileBody(voice))
+        )
+    }
 
 }
 
-object OutgoingPhotoField {
+object OutgoingVoiceField {
 
-    val photo = "photo"
+    val voice = "voice"
 
-    val caption = "caption"
+    val duration = "duration"
 
 }
