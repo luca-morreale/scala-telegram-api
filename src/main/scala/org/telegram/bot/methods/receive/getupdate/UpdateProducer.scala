@@ -80,7 +80,7 @@ class UpdateProducer(token: String, initialOffset: Int = 0, timeout: Int)
      */
     def updateOffset(): Int = offset
 
-    def extractInformation(json: JValue): List[Update] = {
+    protected def extractInformation(json: JValue): List[Update] = {
         for {child <- json.children}
             yield {
                 new Update(child)
