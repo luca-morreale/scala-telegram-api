@@ -18,14 +18,13 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingAudio
 
 /**
- *
+ * Method which sends audios
  */
 
-class SendAudio(token: String) extends BaseMethod(token) with MediaSender[OutgoingAudio] {
+class SendAudio(token: String) extends MediaSender[OutgoingAudio](token) {
 
     override def url(): String = super.url + token + "/" + "sendaudio"
 

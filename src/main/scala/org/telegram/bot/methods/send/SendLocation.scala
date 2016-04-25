@@ -18,14 +18,13 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingLocation
 
 /**
- *
+ * Method which sends locations
  */
 
-class SendLocation(token: String) extends BaseMethod(token) with DataSender[OutgoingLocation] {
+class SendLocation(token: String) extends DataSender[OutgoingLocation](token) {
 
     override def url(): String = super.url + token + "/" + "sendlocation"
 

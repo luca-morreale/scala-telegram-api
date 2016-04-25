@@ -18,14 +18,13 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingVideo
 
 /**
- *
+ * Method which sends videos
  */
 
-class SendVideo(token: String) extends BaseMethod(token) with MediaSender[OutgoingVideo] {
+class SendVideo(token: String) extends MediaSender[OutgoingVideo](token) {
 
     override def url(): String = super.url + token + "/" + "sendvideo"
 

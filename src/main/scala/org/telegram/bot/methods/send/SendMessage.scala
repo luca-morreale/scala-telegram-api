@@ -22,10 +22,10 @@ import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingMessage
 
 /**
- *
+ * Method which sends messages
  */
 
-class SendMessage(token: String) extends BaseMethod(token) with DataSender[OutgoingMessage] {
+class SendMessage(token: String) extends DataSender[OutgoingMessage](token) {
 
     override def url(): String = super.url + token + "/" + "sendmessage"
 

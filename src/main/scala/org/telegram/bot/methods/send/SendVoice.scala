@@ -22,10 +22,10 @@ import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingVoice
 
 /**
- *
+ * Method which sends voices
  */
 
-class SendVoice (token: String) extends BaseMethod(token) with MediaSender[OutgoingVoice] {
+class SendVoice(token: String) extends MediaSender[OutgoingVoice](token) {
 
     override def url(): String = super.url + token + "/" + "sendvoice"
 

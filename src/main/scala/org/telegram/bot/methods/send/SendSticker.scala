@@ -18,14 +18,13 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingSticker
 
 /**
- *
+ * Method which sends stikers
  */
 
-class SendSticker(token: String) extends BaseMethod(token) with DataSender[OutgoingSticker] {
+class SendSticker(token: String) extends DataSender[OutgoingSticker](token) {
 
     override def url(): String = super.url + token + "/" + "sendsticker"
 }

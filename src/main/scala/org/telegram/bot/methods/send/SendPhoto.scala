@@ -18,14 +18,13 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingPhoto
 
 /**
- *
+ * Method which sends photos
  */
 
-class SendPhoto (token: String) extends BaseMethod(token) with MediaSender[OutgoingPhoto] {
+class SendPhoto(token: String) extends MediaSender[OutgoingPhoto](token) {
 
     override def url(): String = super.url + token + "/" + "sendphoto"
 

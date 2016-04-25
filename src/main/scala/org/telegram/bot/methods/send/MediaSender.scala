@@ -18,13 +18,15 @@
 
 package org.telegram.bot.methods.send
 
+import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingData
 
 /**
  * Extention to DataSender which is able to deliver media content, such as audio
  */
 
-trait MediaSender[T <: OutgoingData] extends DataSender[T] {
+abstract class MediaSender[T <: OutgoingData](token: String, timeout: Int = BaseMethod.defaultTimeout)
+                                                                            extends DataSender[T](token, timeout) {
 
      override def send(out: OutgoingData): Unit = {
         val multipart = out.buildMultipart.build

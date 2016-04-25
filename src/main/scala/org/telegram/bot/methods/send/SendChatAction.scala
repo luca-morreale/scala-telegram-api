@@ -18,14 +18,14 @@
 
 package org.telegram.bot.methods.send
 
-import org.telegram.bot.methods.BaseMethod
 import org.telegram.bot.methods.send.data.OutgoingChatAction
 
 /**
- *
+ * Method which sends chat's actions
  */
 
-class SendChatAction(token: String) extends BaseMethod(token) with DataSender[OutgoingChatAction] {
+class SendChatAction(token: String) extends DataSender[OutgoingChatAction](token) {
 
     override def url(): String = super.url + token + "/" + "sendchataction"
+
 }
